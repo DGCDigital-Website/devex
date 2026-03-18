@@ -1,0 +1,49 @@
+@font-face {
+  font-family: 'Neometric';
+  src: url('/fonts/Neometric/Neometric-Regular.woff2') format('woff2'),
+       url('/fonts/Neometric/Neometric-Regular.woff') format('woff'),
+       url('/fonts/Neometric/Neometric-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neometric';
+  src: url('/fonts/Neometric/Neometric-Medium.woff2') format('woff2'),
+       url('/fonts/Neometric/Neometric-Medium.woff') format('woff'),
+       url('/fonts/Neometric/Neometric-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neometric';
+  src: url('/fonts/Neometric/Neometric-Bold.woff2') format('woff2'),
+       url('/fonts/Neometric/Neometric-Bold.woff') format('woff'),
+       url('/fonts/Neometric/Neometric-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neometric';
+  src: url('/fonts/Neometric/Neometric-Light.woff2') format('woff2'),
+       url('/fonts/Neometric/Neometric-Light.woff') format('woff'),
+       url('/fonts/Neometric/Neometric-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neometric';
+  src: url('/fonts/Neometric/Neometric-ExtraBold.woff2') format('woff2'),
+       url('/fonts/Neometric/Neometric-ExtraBold.woff') format('woff'),
+       url('/fonts/Neometric/Neometric-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}

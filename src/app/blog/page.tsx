@@ -1,0 +1,103 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Clock, ArrowRight } from "lucide-react";
+import { BLOG_POSTS } from "@/lib/data";
+
+export const metadata: Metadata = {
+  title: "Blog & Insights | Devex Global Consult",
+  description:
+    "Thought leadership, sector updates, and insights from the DGC team on evaluation, capacity building, and development practice.",
+};
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-GB", {
+    day: "numeric", month: "long", year: "numeric",
+  });
+}
+
+const CATEGORY_COLORS: Record<string, string> = {
+  Innovation:   "#3D9DD9",
+  Digital:      "#50D4F2",
+  MEL:          "#177DA6",
+  "About DGC":  "#7ED1F2",
+};
+
+export default function BlogPage() {
+  return (
+    <main className="min-h-screen bg-white text-gray-900">
+
+      {/* Hero */}
+      <section className="pt-28 pb-16 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-dgc-dark-blue-1/8 via-blue-50/50 to-white" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_60%_at_10%_50%,rgba(61,157,217,0.06),transparent)]" />
+        <div className="relative max-w-5xl mx-auto px-6 sm:px-10">
+          <p className="text-dgc-blue-1 text-xs font-semibold tracking-[0.18em] uppercase mb-4">Resources</p>
+          <h1 className="font-extrabold text-gray-900 leading-tight mb-4" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>
+            Blog & <span className="text-dgc-blue-1">Insights</span>
+          </h1>
+          <p className="text-gray-600 text-lg leading-relaxed max-w-2xl">
+            Thought leadership and practical guidance from the DGC team on evaluation, organisational development,
+            and development practice across Africa.
+          </p>
+        </div>
+      </section>
+
+      {/* Posts grid */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-5xl mx-auto px-6 sm:px-10">
+          <div className="grid md:grid-cols-2 gap-6">
+            {BLOG_POSTS.map((post) => {
+              const accentColor = CATEGORY_COLORS[post.category] ?? "#3D9DD9";
+              return (
+                <Link key={post.slug} href={`/blog/${post.slug}`} className="group block h-full">
+                  <article className="rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-dgc-blue-1/30 transition-all duration-300 h-full flex flex-col overflow-hidden">
+                    {/* Cover */}
+                    <div
+                      className="h-44 flex items-center justify-center"
+                      style={{ background: `linear-gradient(135deg, ${accentColor}10, ${accentColor}05)` }}
+                    >
+                      <span
+                        className="text-6xl font-extrabold select-none"
+                        style={{ color: `${accentColor}15` }}
+                      >
+                        {post.category.charAt(0)}
+                      </span>
+                    </div>
+
+                    <div className="p-6 space-y-3 flex-1 flex flex-col">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full"
+                          style={{ background: `${accentColor}20`, color: accentColor, border: `1px solid ${accentColor}40` }}
+                        >
+                          {post.category}
+                        </span>
+                        <span className="text-gray-400 text-xs flex items-center gap-1">
+                          <Clock className="w-3 h-3" /> {post.readingTime} min read
+                        </span>
+                      </div>
+
+                      <h2 className="text-gray-900 font-bold text-lg leading-snug flex-1 group-hover:text-dgc-blue-1 transition-colors">
+                        {post.title}
+                      </h2>
+
+                      <p className="text-gray-500 text-sm leading-relaxed">{post.excerpt}</p>
+
+                      <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                        <div>
+                          <p className="text-gray-600 text-xs font-medium">{post.author}</p>
+                          <p className="text-gray-400 text-xs">{formatDate(post.publishedAt)}</p>
+                        </div>
+                        <ArrowRight className="w-4 h-4 text-dgc-blue-1 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+                  </article>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
