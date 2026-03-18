@@ -95,7 +95,7 @@ export default function BeaconShell({
     setLoggingOut(true);
     const supabase = createClient();
     await supabase.auth.signOut();
-    router.push("/beacon/login");
+    router.push("/");
     router.refresh();
   };
 
@@ -116,17 +116,17 @@ export default function BeaconShell({
       style={{ background: "linear-gradient(180deg, #0B2D59 0%, #091e40 100%)" }}
     >
       {/* Logo */}
-      <div className="px-5 py-[1.125rem] border-b border-white/10 flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-2.5">
+      <div className="px-6 py-5 border-b border-white/10 flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-3">
           <Image
             src="/logo.svg"
             alt="DGC"
-            width={110}
-            height={32}
-            className="h-7 w-auto"
+            width={120}
+            height={36}
+            className="h-8 w-auto brightness-0 invert"
           />
-          <span className="text-white/25 text-sm font-medium">/</span>
-          <span className="text-white/60 text-sm font-semibold tracking-wide">
+          <div className="h-4 w-px bg-white/15" />
+          <span className="text-white/50 text-[11px] font-bold tracking-[0.12em] uppercase">
             Beacon
           </span>
         </div>

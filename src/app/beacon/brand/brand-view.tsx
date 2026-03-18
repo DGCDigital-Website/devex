@@ -41,44 +41,62 @@ export default function BrandView({ user }: Props) {
         {/* Hero card */}
         <div
           className="relative rounded-2xl overflow-hidden"
-          style={{ background: "linear-gradient(160deg,#0B2D59 0%,#0C2C65 55%,#091e3e 100%)" }}
+          style={{ background: "linear-gradient(160deg,#060e1e 0%,#0B2D59 40%,#0e3a6e 70%,#177DA6 100%)" }}
         >
-          {/* Grid texture */}
-          <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: "linear-gradient(rgba(61,157,217,1) 1px,transparent 1px),linear-gradient(90deg,rgba(61,157,217,1) 1px,transparent 1px)", backgroundSize: "44px 44px" }} />
-          <div className="relative z-10 px-8 py-10">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-6">
-              <div className="flex-1">
-                <div className="inline-flex items-center gap-2 bg-dgc-blue-1/20 border border-dgc-blue-1/30 rounded-full px-3.5 py-1.5 mb-5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-dgc-light" />
-                  <span className="text-dgc-blue-1 text-xs font-semibold tracking-wider uppercase">Brand Identity</span>
-                </div>
-                <h1 className="text-white text-3xl font-bold leading-tight mb-2">Devex Global Consult</h1>
-                <p className="text-dgc-light/80 text-base font-light mb-1">Powerful Insights | Proven Delivery</p>
-                <p className="text-white/40 text-sm max-w-md mt-3 leading-relaxed">
-                  A pan-African consultancy delivering world-class M&E, capacity strengthening, and systems development services across 22+ countries.
-                </p>
+          {/* Fine dot grid texture */}
+          <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: "radial-gradient(circle,rgba(61,157,217,1) 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
+          {/* Glowing orb */}
+          <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full opacity-20" style={{ background: "radial-gradient(circle,#3D9DD9,transparent 70%)" }} />
+          <div className="absolute -bottom-16 -left-16 w-64 h-64 rounded-full opacity-10" style={{ background: "radial-gradient(circle,#50D4F2,transparent 70%)" }} />
+
+          <div className="relative z-10 px-8 pt-10 pb-8">
+            {/* Top row: pill + logo */}
+            <div className="flex items-start justify-between gap-6 mb-8">
+              <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-dgc-light animate-pulse" />
+                <span className="text-white/80 text-[11px] font-semibold tracking-[0.14em] uppercase">Brand Identity · v2025</span>
               </div>
-              <div className="shrink-0">
-                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-5">
-                  <Image src="/logo.svg" alt="DGC Logo" width={160} height={48} className="h-12 w-auto" />
-                </div>
+              <div className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl px-5 py-3 shrink-0">
+                <Image src="/logo.svg" alt="DGC Logo" width={140} height={42} className="h-9 w-auto brightness-0 invert" />
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-2 mt-6">
+            {/* Main headline */}
+            <div className="mb-8">
+              <h1 className="text-white font-extrabold leading-[1.1] tracking-tight mb-3" style={{ fontSize: "clamp(1.75rem,4vw,2.75rem)" }}>
+                Devex Global Consult
+              </h1>
+              <p className="text-dgc-light text-lg font-light tracking-wide mb-3">Powerful Insights · Proven Delivery</p>
+              <p className="text-white/45 text-sm max-w-xl leading-relaxed">
+                A pan-African management consultancy delivering evidence-based M&E, capacity strengthening, and systems development services across 22+ countries and 4 continents.
+              </p>
+            </div>
+
+            {/* Stats row */}
+            <div className="grid grid-cols-3 gap-4 mb-8 max-w-lg">
+              {[
+                { value: "22+", label: "Countries served" },
+                { value: "150+", label: "Assignments completed" },
+                { value: "50+", label: "Clients worldwide" },
+              ].map((s) => (
+                <div key={s.label} className="border-l border-white/15 pl-4">
+                  <p className="text-white text-2xl font-extrabold leading-none">{s.value}</p>
+                  <p className="text-white/40 text-xs mt-1 leading-tight">{s.label}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex flex-wrap gap-2.5">
               <a
                 href="mailto:info@devexglobal.com?subject=DGC Brand Manual"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white border border-white/20 hover:bg-white/10 transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-white/15 border border-white/20 hover:bg-white/25 transition-colors backdrop-blur-sm"
               >
                 <Mail className="w-4 h-4" />
                 Request brand files
               </a>
-              <a
-                href="/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white/60 hover:text-white transition-colors"
-              >
+              <a href="/" target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-white/55 hover:text-white/90 border border-transparent hover:border-white/15 transition-all">
                 <ExternalLink className="w-4 h-4" />
                 View live website
               </a>

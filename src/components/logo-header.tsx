@@ -59,6 +59,7 @@ const SERVICES = [
 const RESOURCES = [
   { href: "/blog", label: "Blog", description: "Insights and analysis", Icon: BookOpen },
   { href: "/jobs", label: "Jobs", description: "Open positions", Icon: Briefcase },
+  { href: "/events", label: "Events", description: "Calendar of events", Icon: Newspaper },
   { href: "/portfolio", label: "Portfolio", description: "Case studies and work", Icon: LayoutGrid },
   { href: "/team", label: "Team", description: "Meet our consultants", Icon: Users },
 ] as const;

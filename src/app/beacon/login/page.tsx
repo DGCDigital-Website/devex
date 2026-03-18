@@ -66,7 +66,7 @@ function LoginForm() {
 
         {/* Logo */}
         <div className="relative z-10 p-10 xl:p-12">
-          <Image src="/logo.svg" alt="Devex Global Consult" width={148} height={44} className="h-10 w-auto" />
+          <Image src="/logo.svg" alt="Devex Global Consult" width={148} height={44} className="h-10 w-auto brightness-0 invert" />
         </div>
 
         {/* Centre content */}

@@ -150,23 +150,14 @@ export default function BeaconDashboard({ user, stats }: Props) {
     },
   ];
 
-  /* Quick-action rows */
+  /* Quick-action cards (3-col grid) */
   const quickActions = [
-    {
-      group: "Operations",
-      items: [
-        { label: "Add contact",   href: "/beacon/contacts/add",    icon: Users,        color: "text-dgc-blue-1",  bg: "bg-dgc-blue-1/8" },
-        { label: "Post a job",    href: "/beacon/jobs/add",         icon: Briefcase,    color: "text-emerald-600", bg: "bg-emerald-50"   },
-        { label: "Open calendar", href: "/beacon/calendar",         icon: CalendarDays, color: "text-indigo-600",  bg: "bg-indigo-50"    },
-      ],
-    },
-    {
-      group: "Finance",
-      items: [
-        { label: "New invoice",    href: "/beacon/invoices/add",    icon: FileText, color: "text-violet-600", bg: "bg-violet-50" },
-        { label: "New quotation",  href: "/beacon/quotations/add",  icon: Receipt,  color: "text-amber-600",  bg: "bg-amber-50"  },
-      ],
-    },
+    { label: "New Contact",   href: "/beacon/contacts/add",   icon: Users,        accent: "from-sky-500 to-dgc-blue-1",    desc: "Add a client or partner"   },
+    { label: "Post a Job",    href: "/beacon/jobs/add",        icon: Briefcase,    accent: "from-emerald-500 to-teal-500",  desc: "Publish a new vacancy"      },
+    { label: "Calendar",      href: "/beacon/calendar",        icon: CalendarDays, accent: "from-indigo-500 to-violet-500", desc: "Schedule events"            },
+    { label: "New Invoice",   href: "/beacon/invoices/add",    icon: FileText,     accent: "from-violet-500 to-purple-500", desc: "Create & send an invoice"   },
+    { label: "New Quotation", href: "/beacon/quotations/add",  icon: Receipt,      accent: "from-amber-500 to-orange-500",  desc: "Draft a quotation"          },
+    { label: "Brand Manual",  href: "/beacon/brand",           icon: ArrowUpRight, accent: "from-pink-500 to-rose-500",     desc: "Visual identity guide"      },
   ];
 
   /* Finance summary row */
@@ -315,52 +306,36 @@ export default function BeaconDashboard({ user, stats }: Props) {
               <h2 className="text-gray-900 font-semibold text-sm">Quick Actions</h2>
               <p className="text-gray-400 text-xs mt-0.5">Jump straight into common tasks</p>
             </div>
-            <div className="p-5 space-y-5">
-              {quickActions.map((group) => (
-                <div key={group.group}>
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-[0.1em] mb-2">
-                    {group.group}
-                  </p>
-                  <div className="space-y-1.5">
-                    {group.items.map((item) => {
-                      const Icon = item.icon;
-                      return (
-                        <Link
-                          key={item.label}
-                          href={item.href}
-                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors group"
-                        >
-                          <div className={`${item.bg} ${item.color} w-7 h-7 rounded-lg flex items-center justify-center shrink-0`}>
-                            <Icon className="w-3.5 h-3.5" />
-                          </div>
-                          <span className="text-gray-700 text-sm font-medium group-hover:text-gray-900 transition-colors flex-1">
-                            {item.label}
-                          </span>
-                          <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-400 group-hover:translate-x-0.5 transition-all" />
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-
-              {/* External link */}
-              <div className="pt-1 border-t border-gray-100">
-                <a
-                  href="/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors group"
-                >
-                  <div className="bg-gray-100 text-gray-500 w-7 h-7 rounded-lg flex items-center justify-center shrink-0">
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </div>
-                  <span className="text-gray-500 text-sm font-medium group-hover:text-gray-700 transition-colors flex-1">
-                    View public site
-                  </span>
-                  <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-400 group-hover:translate-x-0.5 transition-all" />
-                </a>
-              </div>
+            <div className="p-4 grid grid-cols-2 gap-2.5">
+              {quickActions.map((action) => {
+                const Icon = action.icon;
+                return (
+                  <Link
+                    key={action.label}
+                    href={action.href}
+                    className="group relative overflow-hidden rounded-xl p-3.5 flex flex-col gap-2.5 hover:-translate-y-0.5 transition-all duration-200 border border-gray-100 hover:border-transparent hover:shadow-md"
+                  >
+                    {/* gradient bg on hover */}
+                    <div className={`absolute inset-0 bg-gradient-to-br ${action.accent} opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-xl`} />
+                    <div className="relative z-10 flex items-start justify-between">
+                      <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${action.accent} flex items-center justify-center shadow-sm`}>
+                        <Icon className="w-4 h-4 text-white" />
+                      </div>
+                      <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-white/70 opacity-0 group-hover:opacity-100 transition-all translate-x-1 group-hover:translate-x-0" />
+                    </div>
+                    <div className="relative z-10">
+                      <p className="text-gray-800 group-hover:text-white text-[0.8rem] font-semibold leading-tight transition-colors">{action.label}</p>
+                      <p className="text-gray-400 group-hover:text-white/70 text-[10px] mt-0.5 transition-colors">{action.desc}</p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+            <div className="px-4 pb-4">
+              <a href="/" target="_blank" rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-dashed border-gray-200 text-gray-400 hover:text-gray-600 hover:border-gray-300 text-xs font-medium transition-colors">
+                <ExternalLink className="w-3.5 h-3.5" /> View public site
+              </a>
             </div>
           </div>
         </div>
