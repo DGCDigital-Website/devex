@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { emailService } from '@/lib/email-service';
 import { rateLimit, getClientIp } from '@/lib/rate-limit';
+import { createClient } from '@/utils/supabase/server';
 
 export async function POST(request: NextRequest) {
   if (!rateLimit(getClientIp(request))) {
@@ -48,6 +49,31 @@ export async function POST(request: NextRequest) {
     } catch (adminError) {
       console.error('Failed to send admin notification:', adminError);
       // Don't fail the main request if admin notification fails
+    }
+
+    // Add / update contact in Brevo (list 3 = website enquiries)
+    await emailService.addBrevoContact({
+      email,
+      firstName: name,
+      source: 'website-contact-form',
+      listIds: [3],
+    });
+
+    // Persist to Supabase contacts table (fire-and-forget, non-blocking)
+    try {
+      const supabase = await createClient();
+      await supabase.from('contacts').insert({
+        full_name: name,
+        email,
+        company: '',
+        username: email,
+        contact: '',
+        country: '',
+        role: service ?? 'enquiry',
+        status: 'pending',
+      });
+    } catch (dbError) {
+      console.error('Failed to persist contact to Supabase:', dbError);
     }
 
     return NextResponse.json({

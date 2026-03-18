@@ -47,6 +47,14 @@ export async function POST(request: NextRequest) {
       message
     });
 
+    // Add / update contact in Brevo (list 3 = website enquiries)
+    await emailService.addBrevoContact({
+      email,
+      firstName: name,
+      source: 'website-co-create',
+      listIds: [3],
+    });
+
     // Send admin notification
     try {
       await emailService.sendAdminNotification({
@@ -55,7 +63,6 @@ export async function POST(request: NextRequest) {
       });
     } catch (adminError) {
       console.error('Failed to send admin notification:', adminError);
-      // Don't fail the main request if admin notification fails
     }
 
     return NextResponse.json({

@@ -18,9 +18,11 @@ import { BackToTop } from "@/components/back-to-top";
 export function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
+  const isBeacon = pathname.startsWith("/beacon");
+  const isAuth = pathname.startsWith("/auth");
 
-  // Admin pages supply their own header via the admin layout — skip the main site chrome
-  if (isAdmin) return <>{children}</>;
+  // Admin / Beacon / Auth pages supply their own chrome — skip the main site layout
+  if (isAdmin || isBeacon || isAuth) return <>{children}</>;
 
   return (
     <>

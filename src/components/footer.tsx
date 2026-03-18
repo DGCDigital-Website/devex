@@ -16,7 +16,10 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Clock, Facebook, Linkedin, Mail, MapPin, Phone, Twitter } from "lucide-react";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { DotLottieReact, setWasmUrl } from "@lottiefiles/dotlottie-react";
+
+// Serve the WASM file from public/ to enable streaming compile in Next.js
+setWasmUrl("/dotlottie-player.wasm");
 import { NewsletterSubscriptionForm } from "./ui/newsletter-subscription-form";
 import { TermsOfService } from "./ui/terms-of-service";
 import { PrivacyPolicy } from "./ui/privacy-policy";
@@ -269,7 +272,7 @@ export function Footer() {
 
                 {/* DGC Beacon — no dot */}
                 <Link
-                  href="/admin/dashboard"
+                  href="/beacon/login"
                   className="text-white/50 hover:text-dgc-light transition-colors"
                 >
                   DGC Beacon

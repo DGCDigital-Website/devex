@@ -407,6 +407,59 @@ export class EmailService {
     return key;
   }
 
+  /**
+   * Creates or updates a contact in Brevo and optionally adds them to a list.
+   * listIds: Brevo list IDs (create lists in Brevo dashboard under Contacts → Lists)
+   *   - 2 = Newsletter subscribers (default)
+   *   - 3 = Website enquiries
+   */
+  async addBrevoContact(data: {
+    email: string;
+    firstName?: string;
+    lastName?: string;
+    phone?: string;
+    company?: string;
+    source?: string;
+    listIds?: number[];
+  }) {
+    try {
+      const nameParts = (data.firstName ?? '').trim().split(' ');
+      const attrs: Record<string, string> = {};
+      if (data.firstName) attrs['FIRSTNAME'] = data.firstName;
+      if (data.lastName)  attrs['LASTNAME']  = data.lastName;
+      if (!data.lastName && nameParts.length > 1) {
+        attrs['FIRSTNAME'] = nameParts[0];
+        attrs['LASTNAME']  = nameParts.slice(1).join(' ');
+      }
+      if (data.phone)   attrs['SMS']     = data.phone;
+      if (data.company) attrs['COMPANY'] = data.company;
+      if (data.source)  attrs['SOURCE']  = data.source;
+
+      const response = await fetch(`${this.baseUrl}/contacts`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'api-key': this.getApiKey(),
+        },
+        body: JSON.stringify({
+          email: data.email,
+          attributes: attrs,
+          listIds: data.listIds ?? [2],
+          updateEnabled: true,
+        }),
+      });
+
+      if (!response.ok && response.status !== 204) {
+        const err = await response.json().catch(() => ({}));
+        console.error('Brevo addContact error:', err);
+      }
+    } catch (error) {
+      console.error('Failed to add Brevo contact:', error);
+      // Non-fatal — do not propagate
+    }
+  }
+
   private async sendEmail(data: {
     to: Array<{ email: string; name?: string }>;
     subject: string;

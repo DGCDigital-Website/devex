@@ -31,10 +31,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Send email to user
+    // Send welcome email to subscriber
     const result = await emailService.sendNewsletterSubscriptionEmail({
       email,
       name: name || undefined
+    });
+
+    // Add / update contact in Brevo (list 2 = newsletter subscribers)
+    await emailService.addBrevoContact({
+      email,
+      firstName: name || undefined,
+      source: 'website-newsletter',
+      listIds: [2],
     });
 
     // Send admin notification
@@ -45,7 +53,6 @@ export async function POST(request: NextRequest) {
       });
     } catch (adminError) {
       console.error('Failed to send admin notification:', adminError);
-      // Don't fail the main request if admin notification fails
     }
 
     return NextResponse.json({
