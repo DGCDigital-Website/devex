@@ -58,7 +58,7 @@ export default function AddQuotationPage(){
     });
     setLoading(false);
     if(result.error){setError(result.error);return;}
-    router.push("/beacon/quotations");router.refresh();
+    router.push(`/beacon/quotations/${form.id}/preview`);router.refresh();
   }
 
   if(!user)return null;

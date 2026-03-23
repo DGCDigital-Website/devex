@@ -1,8 +1,30 @@
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Printer, Pencil } from "lucide-react";
-import { ADMIN_QUOTATIONS, Quotation } from "@/lib/admin-data";
+import { ArrowLeft } from "lucide-react";
+import type { Quotation } from "@/lib/admin-data";
+import { getAdminQuotation } from "@/lib/admin-store";
+import QuotationActions from "./quotation-actions";
+
+const PRINT_CSS = `
+@page { size: A4 portrait; margin: 10mm; }
+@media print {
+  html, body { margin: 0; padding: 0; background: white; }
+  body * { visibility: hidden !important; }
+  #admin-print-doc, #admin-print-doc * { visibility: visible !important; }
+  #admin-print-doc {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 210mm !important;
+    max-width: 210mm !important;
+    margin: 0 auto !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+}
+`;
 
 function statusBadge(status: Quotation["status"]) {
   const map: Record<Quotation["status"], string> = {
@@ -37,13 +59,15 @@ interface Props {
 
 export default async function QuotationDetailPage({ params }: Props) {
   const { id } = await params;
-  const quotation = ADMIN_QUOTATIONS.find((q) => q.id === id);
+  const quotation = getAdminQuotation(id);
   if (!quotation) notFound();
 
   return (
     <div className="space-y-5">
-      {/* Toolbar */}
-      <div className="flex items-center justify-between">
+      <style dangerouslySetInnerHTML={{ __html: PRINT_CSS }} />
+
+      {/* Toolbar — hidden when printing */}
+      <div className="flex items-center justify-between print:hidden">
         <Link
           href="/admin/quotations"
           className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 transition-colors"
@@ -51,23 +75,11 @@ export default async function QuotationDetailPage({ params }: Props) {
           <ArrowLeft size={16} />
           Back to Quotations
         </Link>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => window.print()}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors print:hidden"
-          >
-            <Printer size={15} />
-            Print
-          </button>
-          <button className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-[#3D9DD9] hover:bg-[#177DA6] rounded-lg transition-colors print:hidden">
-            <Pencil size={15} />
-            Edit
-          </button>
-        </div>
+        <QuotationActions id={id} />
       </div>
 
       {/* Quotation document */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden print:border-0 print:rounded-none">
+      <div id="admin-print-doc" className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         {/* Letterhead */}
         <div className="bg-[#0B2D59] px-10 py-8 flex items-start justify-between">
           <div>

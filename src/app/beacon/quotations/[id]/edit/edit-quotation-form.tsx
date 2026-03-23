@@ -49,7 +49,7 @@ export default function EditQuotationForm({user,quotation}:{user:BeaconUser;quot
     });
     setLoading(false);
     if(result.error){setError(result.error);return;}
-    router.push("/beacon/quotations");router.refresh();
+    router.push(`/beacon/quotations/${quotation.id}/preview`);
   }
 
   return(

@@ -40,65 +40,98 @@ export default function BrandView({ user }: Props) {
 
         {/* Hero card */}
         <div
-          className="relative rounded-2xl overflow-hidden"
-          style={{ background: "linear-gradient(160deg,#060e1e 0%,#0B2D59 40%,#0e3a6e 70%,#177DA6 100%)" }}
+          className="relative rounded-3xl overflow-hidden"
+          style={{ background: "linear-gradient(145deg,#040c1a 0%,#071628 25%,#0B2D59 55%,#0f3f7a 75%,#177DA6 100%)" }}
         >
-          {/* Fine dot grid texture */}
-          <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: "radial-gradient(circle,rgba(61,157,217,1) 1px,transparent 1px)", backgroundSize: "28px 28px" }} />
-          {/* Glowing orb */}
-          <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full opacity-20" style={{ background: "radial-gradient(circle,#3D9DD9,transparent 70%)" }} />
-          <div className="absolute -bottom-16 -left-16 w-64 h-64 rounded-full opacity-10" style={{ background: "radial-gradient(circle,#50D4F2,transparent 70%)" }} />
+          {/* Fine line-grid texture */}
+          <div className="absolute inset-0 opacity-[0.05]"
+            style={{ backgroundImage: "linear-gradient(rgba(61,157,217,1) 1px,transparent 1px),linear-gradient(90deg,rgba(61,157,217,1) 1px,transparent 1px)", backgroundSize: "48px 48px" }} />
+          {/* Large radial glow — top-right */}
+          <div className="absolute -top-32 -right-32 w-[480px] h-[480px] rounded-full opacity-25"
+            style={{ background: "radial-gradient(circle at center,#3D9DD9,transparent 65%)" }} />
+          {/* Small accent glow — bottom-left */}
+          <div className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full opacity-15"
+            style={{ background: "radial-gradient(circle at center,#50D4F2,transparent 65%)" }} />
+          {/* Diagonal highlight strip */}
+          <div className="absolute inset-0 opacity-[0.04]"
+            style={{ background: "linear-gradient(45deg,transparent 30%,rgba(255,255,255,0.8) 50%,transparent 70%)" }} />
 
-          <div className="relative z-10 px-8 pt-10 pb-8">
-            {/* Top row: pill + logo */}
-            <div className="flex items-start justify-between gap-6 mb-8">
-              <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-dgc-light animate-pulse" />
-                <span className="text-white/80 text-[11px] font-semibold tracking-[0.14em] uppercase">Brand Identity · v2025</span>
+          <div className="relative z-10 px-8 sm:px-12 pt-10 pb-10">
+
+            {/* Top bar: badge + logo */}
+            <div className="flex items-start justify-between gap-6 mb-10">
+              <div className="flex flex-col gap-2">
+                <div className="inline-flex items-center gap-2 bg-white/[0.08] border border-white/[0.15] rounded-full px-4 py-1.5 w-fit">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#50D4F2] animate-pulse shrink-0" />
+                  <span className="text-white/70 text-[10.5px] font-bold tracking-[0.15em] uppercase">Brand Identity · v2025</span>
+                </div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl px-5 py-3 shrink-0">
-                <Image src="/logo.svg" alt="DGC Logo" width={140} height={42} className="h-9 w-auto brightness-0 invert" />
+              {/* Logo lockup — glass pill */}
+              <div className="shrink-0 bg-white/[0.06] backdrop-blur-sm border border-white/[0.12] rounded-2xl px-6 py-4 flex items-center gap-3">
+                <Image src="/logo.svg" alt="DGC Logo" width={150} height={44} className="h-10 w-auto brightness-0 invert" />
               </div>
             </div>
 
-            {/* Main headline */}
-            <div className="mb-8">
-              <h1 className="text-white font-extrabold leading-[1.1] tracking-tight mb-3" style={{ fontSize: "clamp(1.75rem,4vw,2.75rem)" }}>
-                Devex Global Consult
+            {/* Headline + tagline */}
+            <div className="mb-7">
+              <h1 className="text-white font-extrabold leading-[1.05] tracking-tight mb-3"
+                style={{ fontSize: "clamp(2rem,4.5vw,3.25rem)" }}>
+                Devex Global<br />
+                <span style={{ color: "#50D4F2" }}>Consult</span>
               </h1>
-              <p className="text-dgc-light text-lg font-light tracking-wide mb-3">Powerful Insights · Proven Delivery</p>
-              <p className="text-white/45 text-sm max-w-xl leading-relaxed">
-                A pan-African management consultancy delivering evidence-based M&E, capacity strengthening, and systems development services across 22+ countries and 4 continents.
+              <p className="text-white/60 font-light tracking-[0.06em] text-base mb-4">
+                Powerful Insights &nbsp;·&nbsp; Proven Delivery
+              </p>
+              <p className="text-white/35 text-sm max-w-lg leading-relaxed">
+                A pan-African management consultancy delivering evidence-based M&E, capacity strengthening, and systems development services across 22+ countries.
               </p>
             </div>
 
+            {/* Service pills */}
+            <div className="flex flex-wrap gap-2 mb-8">
+              {["M&E & Learning","Organisational Strengthening","Capacity Building","Systems Development","Safety & Security"].map((s) => (
+                <span key={s}
+                  className="px-3 py-1.5 rounded-full text-[11px] font-semibold border text-white/65 border-white/[0.12] bg-white/[0.05]">
+                  {s}
+                </span>
+              ))}
+            </div>
+
             {/* Stats row */}
-            <div className="grid grid-cols-3 gap-4 mb-8 max-w-lg">
+            <div className="flex flex-wrap gap-x-8 gap-y-4 mb-8">
               {[
-                { value: "22+", label: "Countries served" },
-                { value: "150+", label: "Assignments completed" },
-                { value: "50+", label: "Clients worldwide" },
+                { value: "480+", label: "Evaluations" },
+                { value: "22+", label: "African countries" },
+                { value: "130+", label: "Consultancies" },
+                { value: "30+", label: "Years expertise" },
               ].map((s) => (
-                <div key={s.label} className="border-l border-white/15 pl-4">
-                  <p className="text-white text-2xl font-extrabold leading-none">{s.value}</p>
-                  <p className="text-white/40 text-xs mt-1 leading-tight">{s.label}</p>
+                <div key={s.label} className="flex items-end gap-2">
+                  <p className="text-white text-[1.875rem] font-extrabold leading-none tracking-tight">{s.value}</p>
+                  <p className="text-white/35 text-xs pb-1 leading-tight">{s.label}</p>
                 </div>
               ))}
             </div>
 
-            {/* Action buttons */}
-            <div className="flex flex-wrap gap-2.5">
-              <a
-                href="mailto:info@devexglobal.com?subject=DGC Brand Manual"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-white/15 border border-white/20 hover:bg-white/25 transition-colors backdrop-blur-sm"
-              >
+            {/* Divider */}
+            <div className="h-px bg-white/10 mb-6" />
+
+            {/* Action row */}
+            <div className="flex flex-wrap items-center gap-3">
+              <a href="mailto:info@devexglobal.com?subject=DGC Brand Manual"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white border border-white/20 bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-sm">
                 <Mail className="w-4 h-4" />
                 Request brand files
               </a>
+              <a href="/logo.svg" download
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border transition-all"
+                style={{ color: "#50D4F2", borderColor: "rgba(80,212,242,0.3)", background: "rgba(80,212,242,0.08)" }}>
+                <Download className="w-4 h-4" />
+                Download logo SVG
+              </a>
               <a href="/" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-white/55 hover:text-white/90 border border-transparent hover:border-white/15 transition-all">
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white/40 hover:text-white/75 transition-colors">
                 <ExternalLink className="w-4 h-4" />
-                View live website
+                View live site
               </a>
             </div>
           </div>

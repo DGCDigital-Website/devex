@@ -186,7 +186,7 @@ export default function BeaconDashboard({ user, stats }: Props) {
   ];
 
   return (
-    <BeaconShell user={user} title="Overview" subtitle="DGC Beacon — internal operations dashboard">
+    <BeaconShell user={user} title="Overview">
       <div className="space-y-7 max-w-[1100px]">
 
         {/* Welcome banner */}

@@ -73,7 +73,7 @@ export default function EditInvoiceForm({ user, invoice }: { user: BeaconUser; i
     });
     setLoading(false);
     if(result.error){setError(result.error);return;}
-    router.push("/beacon/invoices");router.refresh();
+    router.push(`/beacon/invoices/${invoice.id}/preview`);
   }
 
   return (

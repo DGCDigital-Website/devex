@@ -12,14 +12,11 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Clock, Facebook, Linkedin, Mail, MapPin, Phone, Twitter } from "lucide-react";
 import { DotLottieReact, setWasmUrl } from "@lottiefiles/dotlottie-react";
-
-// Serve the WASM file from public/ to enable streaming compile in Next.js
-setWasmUrl("/dotlottie-player.wasm");
 import { NewsletterSubscriptionForm } from "./ui/newsletter-subscription-form";
 import { TermsOfService } from "./ui/terms-of-service";
 import { PrivacyPolicy } from "./ui/privacy-policy";
@@ -42,6 +39,11 @@ export function Footer() {
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isEmailPreviewOpen, setIsEmailPreviewOpen] = useState(false);
+
+  // Set absolute WASM URL so the blob: Web Worker can resolve it correctly
+  useEffect(() => {
+    setWasmUrl(`${window.location.origin}/dotlottie-player.wasm`);
+  }, []);
 
   return (
     <section className="w-full pt-6 sm:pt-8 pb-10 sm:pb-14">

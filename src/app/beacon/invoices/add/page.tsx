@@ -114,7 +114,7 @@ export default function AddInvoicePage() {
     });
     setLoading(false);
     if (result.error) { setError(result.error); return; }
-    router.push("/beacon/invoices");
+    router.push(`/beacon/invoices/${form.id}/preview`);
     router.refresh();
   }
 
