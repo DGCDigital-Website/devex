@@ -1,426 +1,540 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CheckCircle, XCircle, Download, ExternalLink, ArrowRight } from "lucide-react";
+import { CheckCircle, XCircle, Download, ExternalLink } from "lucide-react";
 
-/* ── Data ──────────────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════════════════════════════ */
 
 const COLORS = [
-  { name: "DGC Dark Blue", token: "dgc-dark-blue-1", hex: "#0B2D59", pantone: "Pantone 281 C", cmyk: "100 / 60 / 0 / 60", role: "Hero & footer backgrounds, formal documents", light: false },
-  { name: "DGC Blue", token: "dgc-blue-1", hex: "#3D9DD9", pantone: "Pantone 299 C", cmyk: "72 / 21 / 0 / 15", role: "Primary CTAs, interactive elements, highlights", light: false },
-  { name: "DGC Blue Secondary", token: "dgc-blue-2", hex: "#177DA6", pantone: "Pantone 7690 C", cmyk: "86 / 26 / 0 / 35", role: "Hover states, secondary actions, links", light: false },
-  { name: "DGC Light Blue", token: "dgc-light", hex: "#50D4F2", pantone: "Pantone 298 C", cmyk: "67 / 2 / 0 / 5", role: "Decorative accents, active indicators", light: true },
-  { name: "Near Black", token: "dgc-black", hex: "#0D0D0D", pantone: "Pantone Black C", cmyk: "0 / 0 / 0 / 95", role: "Body text, maximum contrast elements", light: false },
-  { name: "White", token: "—", hex: "#FFFFFF", pantone: "—", cmyk: "0 / 0 / 0 / 0", role: "Page backgrounds, reversed text on dark", light: true, border: true },
+  {
+    name: "Dark Navy",
+    token: "#0B2D59",
+    hex: "#0B2D59",
+    pantone: "Pantone 281 C",
+    cmyk: "100 · 60 · 0 · 60",
+    rgb: "11, 45, 89",
+    role: "Hero backgrounds, formal documents, footers",
+    onDark: false,
+  },
+  {
+    name: "Ocean Blue",
+    token: "#3D9DD9",
+    hex: "#3D9DD9",
+    pantone: "Pantone 299 C",
+    cmyk: "72 · 21 · 0 · 15",
+    rgb: "61, 157, 217",
+    role: "Primary CTAs, interactive highlights, links",
+    onDark: false,
+  },
+  {
+    name: "Deep Blue",
+    token: "#177DA6",
+    hex: "#177DA6",
+    pantone: "Pantone 7690 C",
+    cmyk: "86 · 26 · 0 · 35",
+    rgb: "23, 125, 166",
+    role: "Hover states, secondary actions, pressed",
+    onDark: false,
+  },
+  {
+    name: "Aqua Tint",
+    token: "#50D4F2",
+    hex: "#50D4F2",
+    pantone: "Pantone 298 C",
+    cmyk: "67 · 2 · 0 · 5",
+    rgb: "80, 212, 242",
+    role: "Decorative accents, active indicators",
+    onDark: true,
+  },
+  {
+    name: "Near Black",
+    token: "#0D0D0D",
+    hex: "#0D0D0D",
+    pantone: "Pantone Black C",
+    cmyk: "0 · 0 · 0 · 95",
+    rgb: "13, 13, 13",
+    role: "Body text, maximum-contrast elements",
+    onDark: false,
+  },
+  {
+    name: "White",
+    token: "#FFFFFF",
+    hex: "#FFFFFF",
+    pantone: "—",
+    cmyk: "0 · 0 · 0 · 0",
+    rgb: "255, 255, 255",
+    role: "Page backgrounds, reversed text on dark",
+    onDark: true,
+    bordered: true,
+  },
 ];
 
-const FONTS = [
-  { name: "Neometric", category: "Display / Headlines", specimen: "Aa", desc: "Transforming Africa's Development Landscape", weights: ["Light 300", "Regular 400", "Medium 500", "SemiBold 600", "Bold 700", "ExtraBold 800"], use: "All headlines, hero copy, pull-quotes, display numbers", style: "font-neometric font-bold", files: "woff, woff2, ttf" },
-  { name: "Inter", category: "Body / UI", specimen: "Aa", desc: "Evidence-based consulting across 22 African countries.", weights: ["Regular 400", "Medium 500", "SemiBold 600", "Bold 700"], use: "Body copy, UI labels, captions, navigation items", style: "font-sans font-normal", files: "Google Fonts CDN" },
+const TYPE_SCALE = [
+  { label: "Display", sizeClass: "text-[2.5rem]", weight: "font-neometric font-black", color: "text-[#0B2D59]", sample: "Powerful Insights" },
+  { label: "H1", sizeClass: "text-[1.75rem]", weight: "font-neometric font-bold", color: "text-[#0B2D59]", sample: "Organisational Strengthening" },
+  { label: "H2", sizeClass: "text-[1.25rem]", weight: "font-neometric font-semibold", color: "text-gray-800", sample: "Capacity & Systems" },
+  { label: "H3", sizeClass: "text-[1rem]", weight: "font-neometric font-semibold", color: "text-gray-700", sample: "Evidence-Based Evaluation" },
+  { label: "Body", sizeClass: "text-[0.9375rem]", weight: "font-sans font-normal", color: "text-gray-600", sample: "We deliver measurable outcomes across 22 African countries, grounded in rigorous evidence and deep contextual knowledge." },
+  { label: "Caption", sizeClass: "text-[0.75rem]", weight: "font-sans font-medium", color: "text-gray-400", sample: "30+ years · 480+ evaluations · 98% client satisfaction" },
 ];
 
 const PILLARS = [
-  { no: "01", title: "Mission-Driven", body: "We exist to deliver evidence-based, high-quality consulting that strengthens organisations and communities across Africa." },
-  { no: "02", title: "African Excellence", body: "Every communication should reflect our deep expertise in the African context — professional, precise, and culturally grounded." },
-  { no: "03", title: "Clarity & Credibility", body: "Our voice is authoritative without being cold. We communicate complex findings simply, with confidence and purpose." },
-  { no: "04", title: "Partnership", body: "We speak with, not at, our clients. Collaborative language that positions DGC as a long-term partner, not a vendor." },
-];
-
-const METRICS = [
-  { value: "480+", label: "Evaluations Delivered" },
-  { value: "130+", label: "Consultancies" },
-  { value: "22", label: "African Countries" },
-  { value: "98%", label: "Client Satisfaction" },
+  { label: "Evidence-Based", icon: "⬡", body: "Every recommendation is rooted in data. Findings drive conclusions — not assumptions or precedent." },
+  { label: "African Expertise", icon: "◎", body: "Three decades operating across 22 African nations. Our context is earned, not assumed." },
+  { label: "Proven Delivery", icon: "◈", body: "480+ evaluations and 130+ consultancies completed. We don't advise — we deliver outcomes." },
+  { label: "Partnership", icon: "⬟", body: "Co-creating solutions that build lasting institutional capacity well beyond the engagement." },
 ];
 
 const DOS = [
-  "Always use approved DGC logo files — SVG for digital, vector EPS for print.",
-  "Maintain clear space equal to the height of the 'D' in DGC around the mark.",
-  "Use DGC Dark Blue (#0B2D59) for formal documents and presentations.",
-  "Use Neometric for all headlines and Inter for all body copy.",
-  "Ensure all text on coloured backgrounds meets WCAG 2.1 AA contrast ratio.",
-  "Resize logos proportionally — never stretch or distort.",
+  "Use approved DGC logo files only — SVG for digital, vector EPS/PDF for print.",
+  "Maintain clear space equal to the cap-height of the 'D' on all four sides of the mark.",
+  "Use Dark Navy (#0B2D59) for formal documents and professional presentations.",
+  "Apply Neometric for all headlines and Inter for all body copy, captions, and UI text.",
+  "Verify WCAG 2.1 AA contrast (≥ 4.5:1) for all text placed on coloured backgrounds.",
+  "Scale logos proportionally — lock aspect ratio before resizing.",
 ];
 
 const DONTS = [
-  "Do not recolour the logo outside the approved brand palette.",
+  "Do not recolour the logo outside the six approved brand palette values.",
   "Do not place the logo on visually busy or low-contrast backgrounds.",
-  "Do not use the logo smaller than 80 px wide in digital contexts.",
-  "Do not add drop shadows, outlines, glows, or any effects to the logo.",
-  "Do not use unofficial typefaces on any branded material.",
-  "Do not alter letter-spacing, proportions, or rearrange logo elements.",
+  "Do not render the mark below 80 px wide in any digital context.",
+  "Do not apply drop shadows, glows, outlines, or any graphic effects to the logo.",
+  "Do not typeset brand communications in any font other than Neometric or Inter.",
+  "Do not alter, stretch, rotate, or rearrange any element of the logo mark.",
 ];
 
-/* ── Component ──────────────────────────────────────────────────────────────── */
+const METRICS = [
+  { v: "480+", l: "Evaluations" },
+  { v: "130+", l: "Consultancies" },
+  { v: "22", l: "African Countries" },
+  { v: "98%", l: "Satisfaction Rate" },
+];
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PAGE
+═══════════════════════════════════════════════════════════════════════════ */
 
 export default function BrandManualPage() {
   return (
-    <div className="space-y-0 max-w-5xl">
+    <div className="w-full space-y-6 pb-4">
 
-      {/* ── COVER ──────────────────────────────────────────────────────────── */}
-      <section className="relative rounded-2xl overflow-hidden bg-[#0B2D59] mb-8">
-        {/* gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0C2C65] via-[#0B2D59] to-[#0a1f3f]" />
-        {/* decorative circles */}
-        <div className="absolute -right-16 -top-16 w-72 h-72 rounded-full bg-[#3D9DD9]/10" />
-        <div className="absolute -right-4 -bottom-20 w-48 h-48 rounded-full bg-[#50D4F2]/8" />
-        <div className="absolute left-1/2 bottom-0 w-32 h-32 rounded-full bg-[#177DA6]/15" />
+      {/* ── 1. HERO COVER ─────────────────────────────────────────────────── */}
+      <div className="relative w-full rounded-2xl overflow-hidden bg-[#0B2D59]" style={{ minHeight: 340 }}>
+        {/* Layered radial glows */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-24 -right-24 w-[480px] h-[480px] rounded-full bg-[#3D9DD9]/15 blur-3xl" />
+          <div className="absolute -bottom-16 -left-16 w-[320px] h-[320px] rounded-full bg-[#177DA6]/20 blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#0C2C65]/60 blur-3xl" />
+        </div>
 
-        <div className="relative px-10 pt-12 pb-10">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
-            <div>
-              <div className="inline-flex items-center gap-2 bg-[#3D9DD9]/20 border border-[#3D9DD9]/30 rounded-full px-3 py-1 mb-6">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#50D4F2]" />
-                <span className="text-xs font-semibold text-[#50D4F2] uppercase tracking-widest">Brand Identity Guidelines</span>
+        {/* Dot grid texture */}
+        <div
+          className="absolute inset-0 opacity-[0.07]"
+          style={{ backgroundImage: "radial-gradient(circle, #3D9DD9 1px, transparent 1px)", backgroundSize: "28px 28px" }}
+        />
+
+        <div className="relative z-10 px-8 md:px-12 py-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10">
+          {/* Left: wordmark */}
+          <div className="flex-1 min-w-0">
+            <div className="inline-flex items-center gap-2 bg-[#3D9DD9]/15 border border-[#3D9DD9]/25 rounded-full px-3 py-1 mb-7">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#50D4F2] flex-shrink-0" />
+              <span className="text-[10px] font-bold text-[#50D4F2] uppercase tracking-[0.18em]">
+                Brand Identity Guidelines · v1.0
+              </span>
+            </div>
+
+            <h1 className="font-neometric font-black text-white leading-[0.9] tracking-tight"
+              style={{ fontSize: "clamp(3rem, 6vw, 5rem)" }}>
+              Devex<br />
+              <span
+                style={{ WebkitTextStroke: "1px rgba(61,157,217,0.6)", color: "transparent", display: "block" }}
+                className="font-neometric font-black"
+              >
+                Global
+              </span>
+              Consult
+            </h1>
+
+            <p className="mt-5 text-[#50D4F2]/80 text-sm tracking-[0.22em] uppercase font-light">
+              Powerful Insights&nbsp;&nbsp;·&nbsp;&nbsp;Proven Delivery
+            </p>
+          </div>
+
+          {/* Right: logo + metrics */}
+          <div className="flex flex-col gap-8 lg:items-end">
+            <Image src="/logo-dark.svg" alt="DGC" width={140} height={40} className="h-10 w-auto" />
+
+            <div className="grid grid-cols-4 gap-6">
+              {METRICS.map((m) => (
+                <div key={m.l} className="text-center lg:text-right">
+                  <p className="font-neometric font-black text-[#3D9DD9] text-xl leading-none">{m.v}</p>
+                  <p className="text-white/45 text-[11px] mt-1 font-light leading-tight">{m.l}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom accent line */}
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#3D9DD9]/40 to-transparent" />
+      </div>
+
+      {/* ── BODY GRID ─────────────────────────────────────────────────────── */}
+      <div className="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-6">
+
+        {/* ── LEFT COLUMN ─────────────────────────────────────────────────── */}
+        <div className="space-y-6 min-w-0">
+
+          {/* ── 2. COLOUR PALETTE ───────────────────────────────────────── */}
+          <Section label="02" title="Colour Palette" sub="Use only these values. No unsanctioned tints, CMYK approximations, or off-brand shades.">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {COLORS.map((c) => (
+                <div key={c.hex}
+                  className="group rounded-xl overflow-hidden border border-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+                  {/* Swatch */}
+                  <div
+                    className="h-[88px] w-full relative"
+                    style={{
+                      backgroundColor: c.hex,
+                      border: c.bordered ? "1px solid #e5e7eb" : undefined,
+                    }}
+                  >
+                    <span
+                      className="absolute bottom-2.5 left-3 font-neometric font-black text-[1.4rem] leading-none opacity-20 select-none"
+                      style={{ color: c.onDark ? "#0B2D59" : "#ffffff" }}
+                    >
+                      Aa
+                    </span>
+                    <code
+                      className="absolute top-2.5 right-2.5 text-[10px] font-mono px-1.5 py-0.5 rounded"
+                      style={{
+                        background: c.onDark ? "rgba(11,45,89,0.15)" : "rgba(255,255,255,0.15)",
+                        color: c.onDark ? "#0B2D59" : "#ffffff",
+                      }}
+                    >
+                      {c.hex}
+                    </code>
+                  </div>
+                  {/* Meta */}
+                  <div className="bg-white px-3 py-3">
+                    <p className="text-[13px] font-bold text-gray-900 leading-snug">{c.name}</p>
+                    <p className="text-[11px] text-[#3D9DD9] font-medium mt-0.5">{c.pantone}</p>
+                    <p className="text-[10.5px] text-gray-400 mt-0.5">RGB {c.rgb}</p>
+                    <p className="text-[10.5px] text-gray-300 mt-0.5">CMYK {c.cmyk}</p>
+                    <p className="text-[10.5px] text-gray-500 mt-2 leading-relaxed">{c.role}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Gradient bar */}
+            <div className="mt-1 rounded-xl overflow-hidden flex h-10 border border-gray-100">
+              {(["#0B2D59", "#177DA6", "#3D9DD9", "#50D4F2"] as const).map((hex) => (
+                <div key={hex} className="flex-1 flex items-center justify-center" style={{ backgroundColor: hex }}>
+                  <code className="text-[10px] font-mono text-white/60">{hex}</code>
+                </div>
+              ))}
+            </div>
+            <p className="text-[11px] text-gray-400 text-center -mt-0.5">
+              Brand gradient sequence — dark to light
+            </p>
+          </Section>
+
+          {/* ── 3. TYPOGRAPHY ───────────────────────────────────────────── */}
+          <Section label="03" title="Typography" sub="Two typefaces. Neometric for authority. Inter for clarity. Never mix in a third.">
+            {/* Font cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+              {/* Neometric */}
+              <div className="rounded-xl bg-[#0B2D59] overflow-hidden">
+                <div className="px-6 pt-6 pb-4">
+                  <p className="font-neometric font-black text-white/20 text-[5rem] leading-none select-none">Aa</p>
+                </div>
+                <div className="px-6 pb-6 border-t border-white/10 pt-4">
+                  <p className="font-neometric font-bold text-white text-base">Neometric</p>
+                  <p className="text-[#50D4F2] text-[11px] mt-0.5">Display · Headlines · Pull-quotes</p>
+                  <div className="flex flex-wrap gap-1 mt-3">
+                    {["Light", "Regular", "Medium", "SemiBold", "Bold", "ExtraBold", "Black"].map((w) => (
+                      <span key={w} className="text-[10px] bg-white/10 text-white/60 px-2 py-0.5 rounded">{w}</span>
+                    ))}
+                  </div>
+                  <p className="text-white/40 text-[10px] mt-3">woff · woff2 · ttf — self-hosted</p>
+                </div>
               </div>
-              <h1 className="font-neometric font-black text-white leading-none" style={{ fontSize: "clamp(2.5rem,5vw,4rem)" }}>
-                Devex<br />
-                <span className="text-[#3D9DD9]">Global</span><br />
-                Consult
-              </h1>
-              <p className="text-white/50 font-light mt-4 text-sm tracking-[0.2em] uppercase">
-                Powerful Insights&nbsp;&nbsp;|&nbsp;&nbsp;Proven Delivery
+
+              {/* Inter */}
+              <div className="rounded-xl bg-gray-50 border border-gray-100 overflow-hidden">
+                <div className="px-6 pt-6 pb-4">
+                  <p className="font-sans font-bold text-gray-200 text-[5rem] leading-none select-none">Aa</p>
+                </div>
+                <div className="px-6 pb-6 border-t border-gray-100 pt-4">
+                  <p className="font-sans font-bold text-gray-900 text-base">Inter</p>
+                  <p className="text-[#3D9DD9] text-[11px] mt-0.5">Body · UI labels · Captions</p>
+                  <div className="flex flex-wrap gap-1 mt-3">
+                    {["Regular 400", "Medium 500", "SemiBold 600", "Bold 700"].map((w) => (
+                      <span key={w} className="text-[10px] bg-white border border-gray-200 text-gray-500 px-2 py-0.5 rounded">{w}</span>
+                    ))}
+                  </div>
+                  <p className="text-gray-400 text-[10px] mt-3">Google Fonts CDN — variable font</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Type scale */}
+            <div className="rounded-xl border border-gray-100 bg-white overflow-hidden">
+              <div className="px-5 py-3 border-b border-gray-50">
+                <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">Type Scale</p>
+              </div>
+              <div className="divide-y divide-gray-50">
+                {TYPE_SCALE.map((row) => (
+                  <div key={row.label} className="flex items-baseline gap-5 px-5 py-3 hover:bg-gray-50/60 transition-colors">
+                    <span className="text-[10px] font-mono text-gray-300 w-12 flex-shrink-0">{row.label}</span>
+                    <span className={`${row.sizeClass} ${row.weight} ${row.color} leading-tight truncate`}>{row.sample}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Section>
+
+          {/* ── 4. LOGO GUIDELINES ──────────────────────────────────────── */}
+          <Section label="04" title="Logo Guidelines" sub="Never alter the mark's proportions, colours, or elements. SVG only for digital.">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Primary */}
+              <div className="rounded-xl border border-gray-100 bg-white p-8 flex flex-col items-center gap-5">
+                <Image src="/logo.svg" alt="DGC Logo (Primary)" width={180} height={52} className="h-12 w-auto" />
+                <div className="text-center">
+                  <p className="text-[13px] font-bold text-gray-800">Primary Mark</p>
+                  <p className="text-[11px] text-gray-400 mt-1">Light & white backgrounds</p>
+                  <code className="inline-block mt-2 text-[10px] bg-gray-50 border border-gray-100 text-gray-500 px-2.5 py-1 rounded-lg">/logo.svg</code>
+                </div>
+              </div>
+              {/* Reversed */}
+              <div className="rounded-xl bg-[#0B2D59] p-8 flex flex-col items-center gap-5">
+                <Image src="/logo-dark.svg" alt="DGC Logo (Reversed)" width={180} height={52} className="h-12 w-auto" />
+                <div className="text-center">
+                  <p className="text-[13px] font-bold text-white">Reversed Mark</p>
+                  <p className="text-[11px] text-white/40 mt-1">Dark & navy backgrounds</p>
+                  <code className="inline-block mt-2 text-[10px] bg-white/10 text-white/60 px-2.5 py-1 rounded-lg">/logo-dark.svg</code>
+                </div>
+              </div>
+            </div>
+
+            {/* Rules grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {[
+                { rule: "Clear space", detail: "= cap-height of 'D' on all four sides" },
+                { rule: "Digital min", detail: "80 px wide at 72 dpi" },
+                { rule: "Print min", detail: "20 mm at 300 dpi" },
+                { rule: "Formats", detail: "SVG digital · EPS/PDF print" },
+              ].map((r) => (
+                <div key={r.rule} className="rounded-xl bg-[#3D9DD9]/5 border border-[#3D9DD9]/12 p-4">
+                  <p className="text-[11px] font-bold text-[#177DA6] uppercase tracking-wide">{r.rule}</p>
+                  <p className="text-[12px] text-gray-600 mt-1.5 leading-snug">{r.detail}</p>
+                </div>
+              ))}
+            </div>
+          </Section>
+
+          {/* ── 5. DO'S & DON'TS ────────────────────────────────────────── */}
+          <Section label="05" title="Do's & Don'ts" sub="Follow these rules consistently across every branded touchpoint — internal and external.">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Do */}
+              <div className="rounded-xl border border-green-100 bg-green-50/40 overflow-hidden">
+                <div className="flex items-center gap-2.5 px-5 py-3.5 border-b border-green-100">
+                  <CheckCircle size={14} className="text-green-600 flex-shrink-0" />
+                  <span className="text-[13px] font-bold text-green-700">Do</span>
+                </div>
+                <ul className="p-5 space-y-3">
+                  {DOS.map((item, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <span className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 text-[10px] font-bold mt-0.5">
+                        {i + 1}
+                      </span>
+                      <p className="text-[12.5px] text-gray-600 leading-relaxed">{item}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {/* Don't */}
+              <div className="rounded-xl border border-red-100 bg-red-50/40 overflow-hidden">
+                <div className="flex items-center gap-2.5 px-5 py-3.5 border-b border-red-100">
+                  <XCircle size={14} className="text-red-500 flex-shrink-0" />
+                  <span className="text-[13px] font-bold text-red-600">Don&apos;t</span>
+                </div>
+                <ul className="p-5 space-y-3">
+                  {DONTS.map((item, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <span className="w-5 h-5 rounded-full bg-red-100 text-red-500 flex items-center justify-center flex-shrink-0 text-[10px] font-bold mt-0.5">
+                        {i + 1}
+                      </span>
+                      <p className="text-[12.5px] text-gray-600 leading-relaxed">{item}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </Section>
+        </div>
+
+        {/* ── RIGHT COLUMN ────────────────────────────────────────────────── */}
+        <div className="space-y-6">
+
+          {/* ── BRAND FOUNDATION ────────────────────────────────────────── */}
+          <SideSection label="01" title="Brand Foundation">
+            {/* Mission */}
+            <div className="rounded-xl bg-[#0B2D59] p-5">
+              <p className="text-[10px] font-bold text-[#50D4F2] uppercase tracking-widest mb-3">Mission</p>
+              <p className="font-neometric font-bold text-white text-[15px] leading-snug">
+                Delivering evidence-based insights that strengthen organisations and transform communities across Africa.
               </p>
             </div>
-            <div className="flex flex-col gap-3 md:items-end">
-              <Image src="/logo-dark.svg" alt="DGC" width={160} height={48} className="h-12 w-auto" />
-              <p className="text-white/40 text-xs">Version 1.0 · 2025</p>
+            {/* Vision */}
+            <div className="rounded-xl bg-[#3D9DD9] p-5">
+              <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest mb-3">Vision</p>
+              <p className="font-neometric font-bold text-white text-[15px] leading-snug">
+                An Africa where every development initiative is guided by rigorous evidence, enabling lasting change.
+              </p>
             </div>
-          </div>
+            {/* Tagline */}
+            <div className="rounded-xl border border-gray-100 bg-white p-5">
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Official Tagline</p>
+              <p className="font-neometric font-black text-[#0B2D59] text-[1.1rem] leading-snug">
+                &ldquo;Powerful Insights<br />
+                <span className="text-[#3D9DD9]">Proven Delivery&rdquo;</span>
+              </p>
+            </div>
+          </SideSection>
 
-          {/* metrics strip */}
-          <div className="grid grid-cols-4 gap-4 mt-10 pt-8 border-t border-white/10">
-            {METRICS.map((m) => (
-              <div key={m.label}>
-                <p className="font-neometric font-black text-[#3D9DD9]" style={{ fontSize: "clamp(1.5rem,3vw,2rem)" }}>{m.value}</p>
-                <p className="text-white/50 text-xs mt-0.5">{m.label}</p>
+          {/* ── MESSAGING PILLARS ───────────────────────────────────────── */}
+          <SideSection label="06" title="Messaging Pillars">
+            {PILLARS.map((p, i) => (
+              <div key={p.label}
+                className="flex gap-3.5 p-4 rounded-xl bg-white border border-gray-100 hover:border-[#3D9DD9]/30 hover:bg-[#3D9DD9]/[0.02] transition-all duration-200 group">
+                <div className="w-8 h-8 rounded-lg bg-[#0B2D59] flex items-center justify-center flex-shrink-0">
+                  <span className="font-neometric font-black text-[#3D9DD9] text-[11px]">0{i + 1}</span>
+                </div>
+                <div>
+                  <p className="text-[13px] font-bold text-gray-900 group-hover:text-[#0B2D59] transition-colors">{p.label}</p>
+                  <p className="text-[12px] text-gray-500 mt-1 leading-relaxed">{p.body}</p>
+                </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
+          </SideSection>
 
-      {/* ── BRAND FOUNDATION ──────────────────────────────────────────────── */}
-      <section className="mb-8">
-        <SectionLabel number="01" title="Brand Foundation" subtitle="The mission, purpose, and pillars that define how DGC shows up in the world." />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
-          {/* Mission */}
-          <div className="bg-[#0B2D59] rounded-2xl p-7 flex flex-col gap-3">
-            <span className="text-xs font-bold text-[#50D4F2] uppercase tracking-widest">Mission</span>
-            <p className="font-neometric font-bold text-white text-lg leading-snug">
-              Delivering evidence-based insights that strengthen organisations and transform communities across Africa.
-            </p>
-          </div>
-          {/* Vision */}
-          <div className="bg-[#3D9DD9] rounded-2xl p-7 flex flex-col gap-3">
-            <span className="text-xs font-bold text-white/70 uppercase tracking-widest">Vision</span>
-            <p className="font-neometric font-bold text-white text-lg leading-snug">
-              An Africa where every development initiative is guided by rigorous evidence, empowering lasting change.
-            </p>
-          </div>
-          {/* Pillars */}
-          {PILLARS.map((p) => (
-            <div key={p.no} className="bg-white rounded-2xl border border-gray-100 p-6 flex gap-4">
-              <span className="font-neometric font-black text-[#3D9DD9]/30 text-3xl leading-none flex-shrink-0">{p.no}</span>
-              <div>
-                <p className="font-bold text-gray-900 text-sm">{p.title}</p>
-                <p className="text-gray-500 text-xs mt-1.5 leading-relaxed">{p.body}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── COLOUR PALETTE ────────────────────────────────────────────────── */}
-      <section className="mb-8">
-        <SectionLabel number="02" title="Colour Palette" subtitle="The official DGC brand colours. Use only these values — no off-brand tints or unsanctioned shades." />
-
-        <div className="mt-5 grid grid-cols-2 md:grid-cols-3 gap-4">
-          {COLORS.map((c) => (
-            <div key={c.hex} className="rounded-2xl overflow-hidden border border-gray-100 shadow-sm group">
-              <div
-                className="h-28 w-full flex items-end px-4 pb-3"
-                style={{ backgroundColor: c.hex, border: c.border ? "1px solid #e5e7eb" : "none" }}
-              >
-                <span
-                  className="font-neometric font-black text-2xl leading-none opacity-30"
-                  style={{ color: c.light ? "#0B2D59" : "#ffffff" }}
-                >
-                  {c.token}
-                </span>
-              </div>
-              <div className="bg-white px-4 py-4">
-                <div className="flex items-center justify-between mb-1">
-                  <p className="text-sm font-bold text-gray-900">{c.name}</p>
-                  <code className="text-xs font-mono bg-gray-50 border border-gray-100 px-2 py-0.5 rounded text-gray-500">{c.hex}</code>
+          {/* ── BRAND VOICE ─────────────────────────────────────────────── */}
+          <SideSection label="07" title="Brand Voice">
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { word: "Expert", sub: "Commands authority without condescension" },
+                { word: "Direct", sub: "Clear language, no jargon or filler" },
+                { word: "Warm", sub: "Professional and human — never cold" },
+                { word: "Purposeful", sub: "Every message serves the mission" },
+              ].map((v) => (
+                <div key={v.word} className="rounded-xl bg-[#0B2D59] p-4">
+                  <p className="font-neometric font-black text-[#3D9DD9] text-[1.05rem]">{v.word}</p>
+                  <p className="text-white/45 text-[11px] mt-1.5 leading-relaxed">{v.sub}</p>
                 </div>
-                <p className="text-xs text-[#3D9DD9] font-medium">{c.pantone}</p>
-                <p className="text-xs text-gray-400 mt-0.5">CMYK: {c.cmyk}</p>
-                <p className="text-xs text-gray-400 mt-2 leading-relaxed">{c.role}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Gradient strip */}
-        <div className="mt-4 rounded-2xl overflow-hidden h-14 flex">
-          {["#0B2D59","#177DA6","#3D9DD9","#50D4F2"].map((hex) => (
-            <div key={hex} className="flex-1 flex items-center justify-center" style={{ backgroundColor: hex }}>
-              <span className="text-white/60 font-mono text-xs">{hex}</span>
-            </div>
-          ))}
-        </div>
-        <p className="text-xs text-gray-400 mt-2 text-center">Official DGC gradient sequence — dark to light, left to right</p>
-      </section>
-
-      {/* ── TYPOGRAPHY ────────────────────────────────────────────────────── */}
-      <section className="mb-8">
-        <SectionLabel number="03" title="Typography" subtitle="Two typefaces define DGC's visual voice. Neometric for impact. Inter for clarity." />
-
-        <div className="mt-5 space-y-4">
-          {FONTS.map((font, i) => (
-            <div key={font.name} className={`rounded-2xl overflow-hidden border border-gray-100 ${i === 0 ? "bg-[#0B2D59]" : "bg-white"}`}>
-              <div className="flex flex-col md:flex-row">
-                {/* Specimen */}
-                <div className={`flex items-center justify-center px-10 py-8 min-w-[180px] ${i === 0 ? "bg-[#3D9DD9]/20" : "bg-gray-50"} border-b md:border-b-0 md:border-r ${i === 0 ? "border-white/10" : "border-gray-100"}`}>
-                  <span
-                    className={`font-black leading-none ${font.style}`}
-                    style={{ fontSize: "5rem", color: i === 0 ? "#ffffff" : "#0B2D59" }}
-                  >
-                    {font.specimen}
-                  </span>
-                </div>
-                {/* Details */}
-                <div className="p-6 flex-1">
-                  <div className="flex items-start justify-between gap-4 flex-wrap">
-                    <div>
-                      <p className={`text-xl font-bold ${i === 0 ? "text-white" : "text-gray-900"} ${font.style}`}>{font.name}</p>
-                      <p className={`text-xs mt-0.5 ${i === 0 ? "text-[#50D4F2]" : "text-[#3D9DD9]"}`}>{font.category} · {font.files}</p>
-                    </div>
-                    <div className="flex flex-wrap gap-1">
-                      {font.weights.map((w) => (
-                        <span key={w} className={`text-xs px-2 py-0.5 rounded ${i === 0 ? "bg-white/10 text-white/70" : "bg-gray-50 border border-gray-100 text-gray-500"}`}>{w}</span>
-                      ))}
-                    </div>
-                  </div>
-                  <p className={`mt-4 text-sm leading-relaxed ${font.style} ${i === 0 ? "text-white/80" : "text-gray-600"}`}>{font.desc}</p>
-                  <p className={`mt-3 text-xs ${i === 0 ? "text-white/40" : "text-gray-400"}`}>Used for: {font.use}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Type scale */}
-        <div className="mt-4 bg-white rounded-2xl border border-gray-100 p-6 space-y-3">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-4">Type Scale</p>
-          {[
-            { label: "Display", size: "text-5xl", tag: "font-neometric font-black text-[#0B2D59]", ex: "DGC" },
-            { label: "H1", size: "text-3xl", tag: "font-neometric font-bold text-[#0B2D59]", ex: "Organisational Strengthening" },
-            { label: "H2", size: "text-xl", tag: "font-neometric font-semibold text-gray-800", ex: "Capacity & Systems" },
-            { label: "Body", size: "text-base", tag: "font-sans text-gray-600", ex: "Evidence-based solutions across 22 African countries, delivered with precision." },
-            { label: "Caption", size: "text-xs", tag: "font-sans text-gray-400", ex: "30+ years of expertise · 480+ evaluations · 98% client satisfaction" },
-          ].map((row) => (
-            <div key={row.label} className="flex items-baseline gap-5">
-              <span className="text-xs text-gray-400 w-12 flex-shrink-0">{row.label}</span>
-              <span className={`${row.size} ${row.tag} leading-tight`}>{row.ex}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── LOGO GUIDELINES ───────────────────────────────────────────────── */}
-      <section className="mb-8">
-        <SectionLabel number="04" title="Logo Guidelines" subtitle="Use only approved logo files. Never alter the mark's proportions, colours, or elements." />
-
-        <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Primary */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-8 flex flex-col items-center gap-5">
-            <Image src="/logo.svg" alt="DGC Logo (Primary)" width={200} height={56} className="h-14 w-auto" />
-            <div className="text-center">
-              <p className="text-sm font-bold text-gray-800">Primary Mark</p>
-              <p className="text-xs text-gray-400 mt-1">Light / White backgrounds</p>
-              <code className="text-xs bg-gray-50 border border-gray-100 text-gray-500 px-2.5 py-1 rounded-md mt-2 inline-block">/logo.svg</code>
-            </div>
-          </div>
-          {/* Reversed */}
-          <div className="bg-[#0B2D59] rounded-2xl p-8 flex flex-col items-center gap-5">
-            <Image src="/logo-dark.svg" alt="DGC Logo (Reversed)" width={200} height={56} className="h-14 w-auto" />
-            <div className="text-center">
-              <p className="text-sm font-bold text-white">Reversed Mark</p>
-              <p className="text-xs text-white/50 mt-1">Dark Blue / dark backgrounds</p>
-              <code className="text-xs bg-white/10 text-white/70 px-2.5 py-1 rounded-md mt-2 inline-block">/logo-dark.svg</code>
-            </div>
-          </div>
-        </div>
-
-        {/* Clear space & minimum size */}
-        <div className="mt-4 bg-white rounded-2xl border border-gray-100 p-6">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-4">Clear Space &amp; Minimum Size</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-600">
-            <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 rounded-full bg-[#3D9DD9] mt-1.5 flex-shrink-0" />
-                <p><strong className="text-gray-800">Clear space rule:</strong> Maintain empty space equal to the cap-height of the letter "D" in DGC on all four sides of the logo mark.</p>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 rounded-full bg-[#3D9DD9] mt-1.5 flex-shrink-0" />
-                <p><strong className="text-gray-800">Minimum digital size:</strong> 80 px wide at 72 dpi.</p>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 rounded-full bg-[#3D9DD9] mt-1.5 flex-shrink-0" />
-                <p><strong className="text-gray-800">Minimum print size:</strong> 20 mm wide at 300 dpi.</p>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 rounded-full bg-[#3D9DD9] mt-1.5 flex-shrink-0" />
-                <p><strong className="text-gray-800">File formats:</strong> SVG for all digital use. Vector EPS/PDF for professional print production.</p>
-              </div>
-            </div>
-          </div>
-          <div className="mt-4 bg-[#3D9DD9]/5 border border-[#3D9DD9]/20 rounded-xl px-4 py-3 text-xs text-[#177DA6]">
-            <strong>Important:</strong> The DGC logo is a protected trademark. Only approved colour variants (primary and reversed) may be used. The logo must never appear in any other colour combination.
-          </div>
-        </div>
-      </section>
-
-      {/* ── MESSAGING PILLARS ─────────────────────────────────────────────── */}
-      <section className="mb-8">
-        <SectionLabel number="05" title="Messaging Pillars" subtitle="The four core messages that anchor every DGC communication — internal and external." />
-
-        <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[
-            { title: "Evidence-Based Impact", body: "Every recommendation is grounded in data. We let findings drive conclusions — not assumptions.", accent: "#3D9DD9" },
-            { title: "African Expertise", body: "Over three decades working across 22 African nations. Our context is not assumed — it is earned.", accent: "#177DA6" },
-            { title: "Proven Delivery", body: "480+ evaluations and 130+ consultancies completed. We don't just advise — we deliver.", accent: "#50D4F2" },
-            { title: "Partnership Approach", body: "We co-create solutions with clients, building lasting institutional capacity beyond the engagement.", accent: "#0B2D59" },
-          ].map((p) => (
-            <div key={p.title} className="bg-white rounded-2xl border border-gray-100 p-6 flex gap-4 group hover:shadow-md transition-shadow">
-              <div className="w-1 rounded-full flex-shrink-0" style={{ backgroundColor: p.accent }} />
-              <div>
-                <p className="font-bold text-gray-900 text-sm">{p.title}</p>
-                <p className="text-gray-500 text-xs mt-2 leading-relaxed">{p.body}</p>
-                <div className="flex items-center gap-1 mt-3 text-xs font-medium" style={{ color: p.accent }}>
-                  <span>Use in proposals, reports &amp; presentations</span>
-                  <ArrowRight size={12} />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── BRAND VOICE ───────────────────────────────────────────────────── */}
-      <section className="mb-8">
-        <SectionLabel number="06" title="Brand Voice &amp; Tone" subtitle="DGC sounds authoritative, empathetic, and precise. Never corporate-cold or casual." />
-
-        <div className="mt-5 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            { word: "Expert", desc: "We know our field deeply. Every word earns trust." },
-            { word: "Direct", desc: "Clear language. No unnecessary jargon or filler." },
-            { word: "Warm", desc: "Professional but human. We care about outcomes." },
-            { word: "Purposeful", desc: "Every message serves the mission. No noise." },
-          ].map((v) => (
-            <div key={v.word} className="bg-[#0B2D59] rounded-2xl p-5">
-              <p className="font-neometric font-black text-[#3D9DD9] text-2xl">{v.word}</p>
-              <p className="text-white/60 text-xs mt-2 leading-relaxed">{v.desc}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Tone examples */}
-        <div className="mt-4 bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest">Tone in Practice</p>
-          {[
-            { label: "✓ Do say", text: "Our evaluation of the USAID nutrition programme identified four systemic gaps that — when addressed — could improve reach by 40%.", style: "text-green-700 bg-green-50 border-green-200" },
-            { label: "✗ Don't say", text: "We looked at a USAID thing and found some stuff that could help them get better results. It was pretty interesting!", style: "text-red-600 bg-red-50 border-red-200" },
-          ].map((ex) => (
-            <div key={ex.label} className={`rounded-xl border px-4 py-3 ${ex.style}`}>
-              <p className="text-xs font-bold mb-1.5">{ex.label}</p>
-              <p className="text-sm italic">&ldquo;{ex.text}&rdquo;</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── DO'S & DON'TS ─────────────────────────────────────────────────── */}
-      <section className="mb-8">
-        <SectionLabel number="07" title="Do's &amp; Don'ts" subtitle="Follow these rules consistently to protect brand integrity across all touchpoints." />
-
-        <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-            <div className="flex items-center gap-2.5 px-6 py-4 border-b border-gray-100 bg-green-50">
-              <CheckCircle size={16} className="text-green-600" />
-              <span className="text-sm font-bold text-green-700">Do</span>
-            </div>
-            <ul className="p-6 space-y-3">
-              {DOS.map((item, i) => (
-                <li key={i} className="flex items-start gap-3 text-xs text-gray-600">
-                  <span className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 font-bold text-xs">{i + 1}</span>
-                  {item}
-                </li>
               ))}
-            </ul>
-          </div>
-          <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-            <div className="flex items-center gap-2.5 px-6 py-4 border-b border-gray-100 bg-red-50">
-              <XCircle size={16} className="text-red-500" />
-              <span className="text-sm font-bold text-red-600">Don&apos;t</span>
             </div>
-            <ul className="p-6 space-y-3">
-              {DONTS.map((item, i) => (
-                <li key={i} className="flex items-start gap-3 text-xs text-gray-600">
-                  <span className="w-5 h-5 rounded-full bg-red-100 text-red-500 flex items-center justify-center flex-shrink-0 font-bold text-xs">{i + 1}</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
 
-      {/* ── CONTACT / ASSETS ──────────────────────────────────────────────── */}
-      <section className="bg-gradient-to-br from-[#0B2D59] to-[#0C2C65] rounded-2xl p-8 relative overflow-hidden">
-        <div className="absolute right-0 top-0 w-64 h-64 rounded-full bg-[#3D9DD9]/10 -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute left-1/3 bottom-0 w-32 h-32 rounded-full bg-[#50D4F2]/10 translate-y-1/2" />
-        <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div>
-            <p className="text-xs font-bold text-[#50D4F2] uppercase tracking-widest mb-2">Brand Assets</p>
-            <h2 className="font-neometric font-black text-white text-2xl">Need the full asset pack?</h2>
-            <p className="text-white/60 text-sm mt-2 max-w-md">
-              Request the complete DGC brand toolkit — logo files (SVG, EPS, PNG, PDF), official presentation templates, typography files, and extended usage guidelines.
-            </p>
-            <div className="flex flex-wrap gap-3 mt-5">
-              <Link href="/admin/contacts" className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold bg-[#3D9DD9] hover:bg-[#177DA6] text-white rounded-xl transition-colors">
-                <Download size={15} /> Request Assets
-              </Link>
-              <Link href="/" target="_blank" className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors border border-white/20">
-                <ExternalLink size={15} /> View Live Site
-              </Link>
+            {/* Tone examples */}
+            <div className="space-y-2">
+              <div className="rounded-xl bg-green-50 border border-green-100 px-4 py-3.5">
+                <p className="text-[10px] font-bold text-green-600 uppercase tracking-wide mb-1.5">✓ Write like this</p>
+                <p className="text-[12.5px] text-gray-700 italic leading-relaxed">
+                  &ldquo;Our evaluation of the USAID nutrition programme identified four systemic gaps that — when addressed — could improve reach by 40%.&rdquo;
+                </p>
+              </div>
+              <div className="rounded-xl bg-red-50 border border-red-100 px-4 py-3.5">
+                <p className="text-[10px] font-bold text-red-500 uppercase tracking-wide mb-1.5">✗ Not like this</p>
+                <p className="text-[12.5px] text-gray-600 italic leading-relaxed">
+                  &ldquo;We looked at the USAID project and found some interesting things that could help them get better results!&rdquo;
+                </p>
+              </div>
+            </div>
+          </SideSection>
+
+          {/* ── CONTACT + ASSETS CTA ────────────────────────────────────── */}
+          <div className="relative rounded-xl bg-[#0B2D59] overflow-hidden">
+            <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-[#3D9DD9]/10 blur-2xl pointer-events-none" />
+            <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full bg-[#50D4F2]/10 blur-2xl pointer-events-none" />
+            <div className="relative p-6">
+              <p className="text-[10px] font-bold text-[#50D4F2] uppercase tracking-widest mb-2">Brand Assets</p>
+              <h3 className="font-neometric font-bold text-white text-[1.1rem] leading-snug mb-1.5">
+                Need the full asset pack?
+              </h3>
+              <p className="text-white/50 text-[12px] leading-relaxed mb-5">
+                Request logos (SVG, EPS, PNG, PDF), presentation templates, typeface files, and extended usage guidelines.
+              </p>
+              <div className="space-y-2">
+                <Link href="/admin/contacts"
+                  className="flex items-center justify-center gap-2 w-full py-2.5 bg-[#3D9DD9] hover:bg-[#177DA6] text-white text-[13px] font-semibold rounded-xl transition-colors">
+                  <Download size={13} /> Request Assets
+                </Link>
+                <Link href="/" target="_blank"
+                  className="flex items-center justify-center gap-2 w-full py-2.5 bg-white/8 hover:bg-white/14 text-white text-[13px] font-semibold rounded-xl border border-white/15 transition-colors">
+                  <ExternalLink size={13} /> View Live Site
+                </Link>
+              </div>
+              <p className="text-white/25 text-[10.5px] mt-4 text-center">
+                info@devexglobal.com · v1.0 · 2025
+              </p>
             </div>
           </div>
-          <div className="hidden md:flex flex-col gap-2 text-right flex-shrink-0">
-            <p className="text-xs text-white/40">Brand contact</p>
-            <p className="text-white font-medium text-sm">info@devexglobal.com</p>
-            <p className="text-white/50 text-xs mt-2">Version 1.0 · 2025<br />Devex Global Consult</p>
-          </div>
-        </div>
-      </section>
 
+        </div>
+      </div>
     </div>
   );
 }
 
-/* ── Section label helper ───────────────────────────────────────────────────── */
-function SectionLabel({ number, title, subtitle }: { number: string; title: string; subtitle: string }) {
+/* ═══════════════════════════════════════════════════════════════════════════
+   LAYOUT HELPERS
+═══════════════════════════════════════════════════════════════════════════ */
+
+function Section({
+  label,
+  title,
+  sub,
+  children,
+}: {
+  label: string;
+  title: string;
+  sub: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="flex items-start gap-4">
-      <span className="font-neometric font-black text-4xl text-[#3D9DD9]/25 leading-none mt-1 flex-shrink-0">{number}</span>
-      <div>
-        <h2 className="font-neometric font-bold text-xl text-gray-900" dangerouslySetInnerHTML={{ __html: title }} />
-        <p className="text-sm text-gray-400 mt-0.5">{subtitle}</p>
+    <div className="space-y-4">
+      <div className="flex items-start gap-3">
+        <span className="font-neometric font-black text-[2rem] text-[#3D9DD9]/20 leading-none mt-0.5 flex-shrink-0 select-none">
+          {label}
+        </span>
+        <div>
+          <h2 className="font-neometric font-bold text-[1.05rem] text-gray-900 leading-tight">{title}</h2>
+          <p className="text-[12px] text-gray-400 mt-0.5 leading-snug">{sub}</p>
+        </div>
       </div>
+      <div className="space-y-3">{children}</div>
+    </div>
+  );
+}
+
+function SideSection({
+  label,
+  title,
+  children,
+}: {
+  label: string;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center gap-2.5">
+        <span className="font-neometric font-black text-[1.4rem] text-[#3D9DD9]/20 leading-none select-none">{label}</span>
+        <h2 className="font-neometric font-bold text-[0.95rem] text-gray-900">{title}</h2>
+      </div>
+      <div className="space-y-2.5">{children}</div>
     </div>
   );
 }
