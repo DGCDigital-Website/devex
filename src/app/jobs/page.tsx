@@ -81,10 +81,10 @@ export default async function JobsPage() {
             Careers
           </p>
           <h1
-            className="font-extrabold text-gray-900 leading-tight mb-4"
+            className="leading-tight mb-4"
             style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}
           >
-            Join <span className="text-dgc-blue-1">Our Team</span>
+            <span className="title-thin">Join </span><span className="title-highlight">Our Team</span>
           </h1>
           <p className="text-gray-600 text-lg leading-relaxed max-w-2xl">
             We&apos;re always looking for passionate, experienced development
@@ -101,8 +101,8 @@ export default async function JobsPage() {
             <p className="text-dgc-blue-1 text-[11px] font-semibold tracking-[0.18em] uppercase mb-1">
               Open Positions
             </p>
-            <h2 className="text-gray-900 font-bold text-2xl">
-              {jobs.length} Open Role{jobs.length !== 1 ? "s" : ""}
+            <h2 className="text-2xl sm:text-3xl leading-tight">
+              <span className="title-thin">{jobs.length} Open </span><span className="title-highlight">Role{jobs.length !== 1 ? "s" : ""}</span>
             </h2>
           </div>
 

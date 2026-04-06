@@ -9,9 +9,6 @@ export { default as AboutUs } from "./about-us";
 export { default as Services } from "./services";
 export { default as Testimonials } from "./testimonials";
 
-// DGC Form Components
-export { ContactFormDemo } from "./SignupFormDemo";
-
 // DGC UI Components
 export { BackToTop } from "./back-to-top";
 export { default as DotGrid } from "./ui/DotGrid";

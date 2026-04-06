@@ -65,6 +65,7 @@ export interface Project {
   description: string;
   tags: string[];
   donor?: string;
+  isoList?: string[]; // for multi-country projects — spreads the pin across all listed ISOs
 }
 
 export interface Testimonial {

@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/next-script-for-ga */
 import "./globals.css";
-import "./fonts.css";
+import "./neometric-fonts.css";
 import type { Metadata } from "next";
 import { Layout } from "@/components";
 import { Analytics } from "@vercel/analytics/react";
@@ -36,7 +36,7 @@ export default function RootLayout({
           gtag('config', 'G-XXXXXXXXXX');
         `}
       </Script>
-      <body className="font-neometric">
+      <body className="font-neometric antialiased">
         <Layout>
           {children}
         </Layout>

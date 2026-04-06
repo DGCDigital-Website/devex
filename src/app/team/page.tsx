@@ -21,8 +21,8 @@ export default function TeamPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_60%_at_50%_0%,rgba(61,157,217,0.06),transparent)]" />
         <div className="relative max-w-5xl mx-auto px-6 sm:px-10 text-center">
           <p className="text-dgc-blue-1 text-xs font-semibold tracking-[0.18em] uppercase mb-4">Our Team</p>
-          <h1 className="font-extrabold text-gray-900 leading-tight mb-4" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>
-            The Experts Behind <span className="text-dgc-blue-1">DGC</span>
+          <h1 className="leading-tight mb-4" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>
+            <span className="title-thin">The Experts Behind </span><span className="title-highlight">DGC</span>
           </h1>
           <p className="text-gray-600 text-lg leading-relaxed max-w-2xl mx-auto">
             Our multidisciplinary team brings decades of combined experience across evaluation, organisational
@@ -36,7 +36,7 @@ export default function TeamPage() {
         <div className="max-w-5xl mx-auto px-6 sm:px-10">
           <div className="mb-10">
             <p className="text-dgc-blue-1 text-[11px] font-semibold tracking-[0.18em] uppercase mb-1">Leadership</p>
-            <h2 className="text-gray-900 font-bold text-2xl">Senior Team</h2>
+            <h2 className="text-2xl sm:text-3xl leading-tight"><span className="title-thin">Senior </span><span className="title-highlight">Team</span></h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {featured.map((member) => (
@@ -96,7 +96,7 @@ export default function TeamPage() {
             <p className="text-dgc-blue-1 text-[11px] font-semibold tracking-[0.18em] uppercase mb-1">
               Consultants & Staff
             </p>
-            <h2 className="text-gray-900 font-bold text-2xl">Full Team</h2>
+            <h2 className="text-2xl sm:text-3xl leading-tight"><span className="title-thin">Full </span><span className="title-highlight">Team</span></h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {rest.map((member) => (

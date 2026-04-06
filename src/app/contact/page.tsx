@@ -199,10 +199,10 @@ export default function ContactPage() {
                   Contact Us
                 </p>
                 <h1
-                  className="font-extrabold text-gray-900 leading-tight mb-4"
+                  className="leading-tight mb-4"
                   style={{ fontSize: "clamp(2rem,4vw,3.5rem)" }}
                 >
-                  Get in <span className="text-dgc-blue-1">Touch</span>
+                  <span className="title-thin">Get in </span><span className="title-highlight">Touch</span>
                 </h1>
                 <p className="text-gray-600 text-lg leading-relaxed">
                   Ready to strengthen your organisation or evaluate your programmes?

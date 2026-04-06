@@ -29,8 +29,8 @@ export default function ServicesPage() {
     <main className="py-10 sm:py-14">
       <Container>
         <div className="max-w-3xl">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
-            Services
+          <h1 className="text-3xl sm:text-4xl leading-tight">
+            <span className="title-thin">Our </span><span className="title-highlight">Services</span>
           </h1>
           <p className="mt-4 text-gray-600 leading-relaxed">
             Explore our consultancy service areas. Each page can be expanded with

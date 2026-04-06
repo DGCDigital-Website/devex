@@ -42,10 +42,6 @@ const nextConfig = {
     ],
   },
 
-  // Turbopack (Next.js 16 default) handles WebAssembly natively — no extra config needed.
-  // An empty object silences the "webpack config present but no turbopack config" warning.
-  turbopack: {},
-
   async headers() {
     return [
       {

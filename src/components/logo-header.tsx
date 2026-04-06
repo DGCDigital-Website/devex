@@ -32,24 +32,28 @@ type DropdownKey = "services" | "resources" | null;
 const SERVICES = [
   {
     id: "org-strengthening",
+    href: "/services/organizational-strengthening",
     label: "Organizational Strengthening",
     description: "Building resilient institutions",
     Icon: Briefcase,
   },
   {
     id: "capacity-strengthening",
+    href: "/services/capacity-strengthening",
     label: "Capacity Strengthening",
     description: "Empowering people to deliver",
     Icon: Users,
   },
   {
     id: "system-strengthening",
+    href: "/services/system-strengthening",
     label: "System Strengthening",
     description: "Designing systems that scale",
     Icon: Newspaper,
   },
   {
     id: "safety-security",
+    href: "/services/safety-security",
     label: "Safety & Security System Strengthening",
     description: "Protecting people and operations",
     Icon: ShieldCheck,
@@ -70,20 +74,6 @@ function scrollToId(id: string) {
   el.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-function scrollToService(serviceId: (typeof SERVICES)[number]["id"]) {
-  scrollToId("services");
-  setTimeout(() => {
-    const tabButton = document.querySelector(
-      `[data-service-id="${serviceId}"]`
-    ) as HTMLButtonElement | null;
-    tabButton?.click();
-  }, 700);
-}
-
-function topNavPlaceholderClick(e: React.MouseEvent, closeAll: () => void) {
-  e.preventDefault();
-  closeAll();
-}
 
 const LogoHeader = () => {
   const [activeDropdown, setActiveDropdown] = useState<DropdownKey>(null);
@@ -233,13 +223,10 @@ const LogoHeader = () => {
                     {SERVICES.map((svc) => {
                       const Icon = svc.Icon;
                       return (
-                        <button
+                        <Link
                           key={svc.id}
-                          type="button"
-                          onClick={() => {
-                            scrollToService(svc.id);
-                            closeAll();
-                          }}
+                          href={svc.href}
+                          onClick={() => closeAll()}
                           className="text-left flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors group"
                           role="menuitem"
                         >
@@ -254,7 +241,7 @@ const LogoHeader = () => {
                               {svc.description}
                             </p>
                           </div>
-                        </button>
+                        </Link>
                       );
                     })}
                   </div>
@@ -400,15 +387,15 @@ const LogoHeader = () => {
                     {SERVICES.map((svc) => {
                       const Icon = svc.Icon;
                       return (
-                        <button
+                        <Link
                           key={svc.id}
-                          type="button"
-                          onClick={() => { scrollToService(svc.id); closeAll(); }}
-                          className="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-black/70 hover:bg-black/5 transition-colors"
+                          href={svc.href}
+                          onClick={() => closeAll()}
+                          className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-black/70 hover:bg-black/5 transition-colors"
                         >
                           <Icon className="w-4 h-4 text-dgc-blue-2 shrink-0" />
                           {svc.label}
-                        </button>
+                        </Link>
                       );
                     })}
                     <Link

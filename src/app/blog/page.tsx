@@ -32,8 +32,8 @@ export default function BlogPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_60%_at_10%_50%,rgba(61,157,217,0.06),transparent)]" />
         <div className="relative max-w-5xl mx-auto px-6 sm:px-10">
           <p className="text-dgc-blue-1 text-xs font-semibold tracking-[0.18em] uppercase mb-4">Resources</p>
-          <h1 className="font-extrabold text-gray-900 leading-tight mb-4" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>
-            Blog & <span className="text-dgc-blue-1">Insights</span>
+          <h1 className="leading-tight mb-4" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>
+            <span className="title-thin">Blog & </span><span className="title-highlight">Insights</span>
           </h1>
           <p className="text-gray-600 text-lg leading-relaxed max-w-2xl">
             Thought leadership and practical guidance from the DGC team on evaluation, organisational development,

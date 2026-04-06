@@ -7,7 +7,8 @@
   "homepage": "https://devexglobal.com",
   "description": "Devex Global Consult - Powerful Insights, Proven Delivery. Professional consultancy services website.",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
+    "dev:turbo": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint \"src/**/*.{ts,tsx,js,jsx}\""

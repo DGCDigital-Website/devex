@@ -92,9 +92,9 @@ export default async function EventsPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_60%_at_10%_50%,rgba(61,157,217,0.06),transparent)]" />
         <div className="relative max-w-5xl mx-auto px-6 sm:px-10">
           <p className="text-dgc-blue-1 text-xs font-semibold tracking-[0.18em] uppercase mb-4">Resources</p>
-          <h1 className="font-extrabold text-gray-900 leading-tight mb-4"
+          <h1 className="leading-tight mb-4"
             style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>
-            Events &amp; <span className="text-dgc-blue-1">Programmes</span>
+            <span className="title-thin">Events & </span><span className="title-highlight">Programmes</span>
           </h1>
           <p className="text-gray-600 text-lg leading-relaxed max-w-2xl">
             Workshops, training programmes, conferences, and forums — join DGC to learn,
@@ -116,10 +116,8 @@ export default async function EventsPage() {
         <div className="max-w-5xl mx-auto px-6 sm:px-10">
           <div className="mb-8 pt-16">
             <p className="text-dgc-blue-1 text-[11px] font-semibold tracking-[0.18em] uppercase mb-1">Upcoming</p>
-            <h2 className="text-gray-900 font-bold text-2xl">
-              {upcoming.length > 0
-                ? `${upcoming.length} Upcoming Event${upcoming.length !== 1 ? "s" : ""}`
-                : "No Upcoming Events"}
+            <h2 className="text-2xl sm:text-3xl leading-tight">
+              <span className="title-thin">{upcoming.length > 0 ? `${upcoming.length} Upcoming ` : "No Upcoming "}</span><span className="title-highlight">Event{upcoming.length !== 1 ? "s" : ""}</span>
             </h2>
           </div>
 
@@ -212,7 +210,7 @@ export default async function EventsPage() {
           <div className="max-w-5xl mx-auto px-6 sm:px-10">
             <div className="mb-8">
               <p className="text-gray-400 text-[11px] font-semibold tracking-[0.18em] uppercase mb-1">Archive</p>
-              <h2 className="text-gray-900 font-bold text-xl">Past Events</h2>
+              <h2 className="text-xl sm:text-2xl leading-tight"><span className="title-thin">Past </span><span className="title-highlight">Events</span></h2>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {past.map((evt) => {

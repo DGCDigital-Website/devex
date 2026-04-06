@@ -487,10 +487,6 @@ html {
   body {
     @apply bg-background text-foreground font-neometric;
   }
-
-  html, body, div, span, h1, h2, h3, h4, h5, h6, p, a, button, input, textarea, label {
-    font-family: 'Neometric', sans-serif;
-  }
 }
 
 /* Hide scrollbar for the service-tab strip (scroll still works) */

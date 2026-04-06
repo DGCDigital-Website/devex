@@ -15,7 +15,16 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Clock, Facebook, Linkedin, Mail, MapPin, Phone, Twitter } from "lucide-react";
+import {
+  Clock,
+  Facebook,
+  Instagram,
+  Linkedin,
+  Mail,
+  MapPin,
+  Phone,
+  X,
+} from "lucide-react";
 import { DotLottieReact, setWasmUrl } from "@lottiefiles/dotlottie-react";
 import { NewsletterSubscriptionForm } from "./ui/newsletter-subscription-form";
 import { TermsOfService } from "./ui/terms-of-service";
@@ -30,7 +39,8 @@ const CONTACT = {
   hours: "Mon–Fri: 9AM–5PM | Sat: 9AM–1PM",
   social: {
     linkedin: "https://www.linkedin.com/company/devexglobal",
-    twitter: "https://twitter.com/devexglobal",
+    x: "https://x.com/devexglobal",
+    instagram: "https://www.instagram.com/devexglobal",
     facebook: "https://www.facebook.com/devexglobal",
   },
 } as const;
@@ -86,33 +96,42 @@ export function Footer() {
                 <p className="body-text-dark mb-6 max-w-sm">
                   Devex Global Consult delivers powerful insights and proven delivery to NGOs, government agencies, and international development organisations across Africa and beyond.
                 </p>
-                <div className="flex items-center gap-2.5 pt-1">
+                <div className="flex flex-wrap items-center gap-2 pt-1">
                   <a
                     href={CONTACT.social.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center text-white/50 hover:text-dgc-blue-1 hover:border-dgc-blue-1/40 transition-colors"
+                    className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/12 bg-white/[0.05] text-white/70 shadow-sm transition-colors hover:border-dgc-blue-1/45 hover:bg-white/[0.09] hover:text-dgc-blue-1"
                     aria-label="LinkedIn"
                   >
-                    <Linkedin className="w-3.5 h-3.5" />
+                    <Linkedin className="h-3.5 w-3.5" strokeWidth={1.75} />
                   </a>
                   <a
-                    href={CONTACT.social.twitter}
+                    href={CONTACT.social.x}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center text-white/50 hover:text-dgc-blue-1 hover:border-dgc-blue-1/40 transition-colors"
-                    aria-label="Twitter"
+                    className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/12 bg-white/[0.05] text-white/70 shadow-sm transition-colors hover:border-dgc-blue-1/45 hover:bg-white/[0.09] hover:text-dgc-blue-1"
+                    aria-label="X"
                   >
-                    <Twitter className="w-3.5 h-3.5" />
+                    <X className="h-3.5 w-3.5" strokeWidth={1.75} />
+                  </a>
+                  <a
+                    href={CONTACT.social.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/12 bg-white/[0.05] text-white/70 shadow-sm transition-colors hover:border-dgc-blue-1/45 hover:bg-white/[0.09] hover:text-dgc-blue-1"
+                    aria-label="Instagram"
+                  >
+                    <Instagram className="h-3.5 w-3.5" strokeWidth={1.75} />
                   </a>
                   <a
                     href={CONTACT.social.facebook}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center text-white/50 hover:text-dgc-blue-1 hover:border-dgc-blue-1/40 transition-colors"
+                    className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/12 bg-white/[0.05] text-white/70 shadow-sm transition-colors hover:border-dgc-blue-1/45 hover:bg-white/[0.09] hover:text-dgc-blue-1"
                     aria-label="Facebook"
                   >
-                    <Facebook className="w-3.5 h-3.5" />
+                    <Facebook className="h-3.5 w-3.5" strokeWidth={1.75} />
                   </a>
                 </div>
               </div>
@@ -208,11 +227,11 @@ export function Footer() {
                     </h4>
                     <div className="space-y-2.5">
                       <div className="flex items-start gap-2.5 text-white/80">
-                        <MapPin className="w-4 h-4 text-dgc-blue-1 shrink-0 mt-0.5" />
+                        <MapPin className="w-4 h-4 text-dgc-blue-1 shrink-0 mt-0.5" strokeWidth={1.75} />
                         <span className="leading-relaxed">{CONTACT.address}</span>
                       </div>
                       <div className="flex items-center gap-2.5 text-white/80">
-                        <Phone className="w-4 h-4 text-dgc-blue-1 shrink-0" />
+                        <Phone className="w-4 h-4 text-dgc-blue-1 shrink-0" strokeWidth={1.75} />
                         <a
                           href={`tel:${CONTACT.phone}`}
                           className="hover:text-white transition-colors"
@@ -221,7 +240,7 @@ export function Footer() {
                         </a>
                       </div>
                       <div className="flex items-center gap-2.5 text-white/80">
-                        <Mail className="w-4 h-4 text-dgc-blue-1 shrink-0" />
+                        <Mail className="w-4 h-4 text-dgc-blue-1 shrink-0" strokeWidth={1.75} />
                         <a
                           href={`mailto:${CONTACT.email}`}
                           className="hover:text-white transition-colors"
@@ -230,7 +249,7 @@ export function Footer() {
                         </a>
                       </div>
                       <div className="flex items-center gap-2.5 text-white/80">
-                        <Clock className="w-4 h-4 text-dgc-blue-1 shrink-0" />
+                        <Clock className="w-4 h-4 text-dgc-blue-1 shrink-0" strokeWidth={1.75} />
                         <span>{CONTACT.hours}</span>
                       </div>
                     </div>

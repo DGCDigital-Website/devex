@@ -53,9 +53,9 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_20%_50%,rgba(61,157,217,0.06),transparent)]" />
         <div className="relative max-w-5xl mx-auto px-6 sm:px-10">
           <p className="text-dgc-blue-1 text-xs font-semibold tracking-[0.18em] uppercase mb-4">About DGC</p>
-          <h1 className="font-extrabold text-gray-900 leading-tight mb-6" style={{ fontSize: "clamp(2.5rem,5vw,4rem)" }}>
-            Powerful Insights.{" "}
-            <span className="text-dgc-blue-1">Proven Delivery.</span>
+          <h1 className="leading-tight mb-6" style={{ fontSize: "clamp(2.5rem,5vw,4rem)" }}>
+            <span className="title-thin">Powerful Insights. Proven </span>
+            <span className="title-highlight">Delivery.</span>
           </h1>
           <p className="text-gray-600 text-lg leading-relaxed mb-8 max-w-2xl">
             Devex Global Consult is an African-led international development consulting firm headquartered in Nairobi,
@@ -93,7 +93,7 @@ export default function AboutPage() {
               <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
                 <Target className="w-5 h-5 text-dgc-blue-1" />
               </div>
-              <h2 className="text-gray-900 font-bold text-2xl">Our Mission</h2>
+              <h2 className="text-2xl sm:text-3xl leading-tight"><span className="title-thin">Our </span><span className="title-highlight">Mission</span></h2>
               <p className="text-gray-600 leading-relaxed">
                 To empower organisations and communities through strategic guidance, advanced technical support,
                 and robust project management — delivering measurable impact across Africa and beyond.
@@ -103,7 +103,7 @@ export default function AboutPage() {
               <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
                 <Eye className="w-5 h-5 text-dgc-blue-1" />
               </div>
-              <h2 className="text-gray-900 font-bold text-2xl">Our Vision</h2>
+              <h2 className="text-2xl sm:text-3xl leading-tight"><span className="title-thin">Our </span><span className="title-highlight">Vision</span></h2>
               <p className="text-gray-600 leading-relaxed">
                 To be the foremost leader in innovative and sustainable consulting across Africa, empowering
                 organisations to maximise their impact and achieve their development objectives.
@@ -118,8 +118,8 @@ export default function AboutPage() {
         <div className="max-w-5xl mx-auto px-6 sm:px-10">
           <div className="text-center mb-12">
             <p className="text-dgc-blue-1 text-xs font-semibold tracking-[0.18em] uppercase mb-3">Our Values</p>
-            <h2 className="text-gray-900 font-bold text-3xl sm:text-4xl">
-              What Drives <span className="text-dgc-blue-1">Everything We Do</span>
+            <h2 className="text-3xl sm:text-4xl leading-tight">
+              <span className="title-thin">What Drives </span><span className="title-highlight">Everything We Do</span>
             </h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -139,7 +139,7 @@ export default function AboutPage() {
       {/* CTA */}
       <section className="py-20 border-t border-gray-100">
         <div className="max-w-5xl mx-auto px-6 sm:px-10 text-center space-y-5">
-          <h2 className="text-gray-900 font-bold text-3xl">Ready to Work Together?</h2>
+          <h2 className="text-3xl sm:text-4xl leading-tight"><span className="title-thin">Ready to Work </span><span className="title-highlight">Together?</span></h2>
           <p className="text-gray-500 text-base max-w-xl mx-auto">
             Tell us about your challenge. We&apos;ll design a solution that delivers.
           </p>
