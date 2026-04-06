@@ -4,7 +4,7 @@
  * Features:
  * - Newsletter subscription form
  * - DGC branding and social links
- * - Carbon footprint rating
+ * - What We Do (service links)
  * - Organised navigation sections
  * - Professional legal links and copyright
  * - Rounded corners and elevated positioning
@@ -12,7 +12,7 @@
 
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -25,7 +25,6 @@ import {
   Phone,
   X,
 } from "lucide-react";
-import { DotLottieReact, setWasmUrl } from "@lottiefiles/dotlottie-react";
 import { NewsletterSubscriptionForm } from "./ui/newsletter-subscription-form";
 import { TermsOfService } from "./ui/terms-of-service";
 import { PrivacyPolicy } from "./ui/privacy-policy";
@@ -45,15 +44,28 @@ const CONTACT = {
   },
 } as const;
 
+/** Matches “What We Do” dropdown in `logo-header.tsx` */
+const WHAT_WE_DO_LINKS = [
+  { href: "/services/organizational-strengthening", label: "Organizational Strengthening" },
+  { href: "/services/capacity-strengthening", label: "Capacity Strengthening" },
+  { href: "/services/system-strengthening", label: "System Strengthening" },
+  { href: "/services/safety-security", label: "Safety & Security System Strengthening" },
+] as const;
+
+/** Top-level nav aligned with `logo-header.tsx` (Home, About, Portfolio, Services, Resources, Contact) */
+const FOOTER_NAV_LINKS = [
+  { href: "/", label: "Home" },
+  { href: "/#about", label: "About Us" },
+  { href: "/portfolio", label: "Portfolio" },
+  { href: "/services", label: "Services" },
+  { href: "/blog", label: "Resources" },
+  { href: "/contact", label: "Contact" },
+] as const;
+
 export function Footer() {
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isEmailPreviewOpen, setIsEmailPreviewOpen] = useState(false);
-
-  // Set absolute WASM URL so the blob: Web Worker can resolve it correctly
-  useEffect(() => {
-    setWasmUrl(`${window.location.origin}/dotlottie-player.wasm`);
-  }, []);
 
   return (
     <section className="w-full pt-6 sm:pt-8 pb-10 sm:pb-14">
@@ -141,30 +153,25 @@ export function Footer() {
                 <div className="w-px h-full mx-auto bg-gradient-to-b from-transparent via-white/20 to-transparent opacity-90" />
               </div>
 
-              {/* Carbon + Navigation + Contact */}
+              {/* What We Do + Navigation + Contact */}
               <div className="lg:col-span-8">
                 <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_1px_minmax(0,1fr)_1px_minmax(0,1fr)] gap-y-8 md:gap-y-0 md:gap-x-0 items-stretch">
                   <div className="min-w-0 md:pr-10">
                     <h4 className="text-dgc-blue-1 font-semibold text-base sm:text-lg mb-4">
-                      Carbon Footprint Rating
+                      What We Do
                     </h4>
-                    <div className="flex items-start gap-3">
-                      <div className="w-12 h-12">
-                        <DotLottieReact
-                          src="https://lottie.host/afed7f34-5ac7-4030-aef0-f2c47b511a04/w3Iylhkz22.lottie"
-                          loop
-                          autoplay
-                        />
-                      </div>
-                      <div>
-                        <div className="text-dgc-blue-1 font-semibold text-base leading-snug">
-                          Only <strong>0.25g</strong> of CO₂ per visit
-                        </div>
-                        <div className="text-white/70 text-sm leading-relaxed mt-1">
-                          Running on sustainable energy
-                        </div>
-                      </div>
-                    </div>
+                    <ul className="space-y-2">
+                      {WHAT_WE_DO_LINKS.map((item) => (
+                        <li key={item.href}>
+                          <Link
+                            href={item.href}
+                            className="text-white/80 hover:text-white transition-colors leading-relaxed"
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
 
                   <div className="hidden md:block w-[1px] justify-self-center self-stretch bg-gradient-to-b from-transparent via-white/25 to-transparent opacity-100" />
@@ -174,48 +181,16 @@ export function Footer() {
                       Navigation
                     </h4>
                     <ul className="space-y-2">
-                      <li>
-                        <a
-                          href="#about"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            document
-                              .getElementById("about")
-                              ?.scrollIntoView({ behavior: "smooth" });
-                          }}
-                          className="text-white/80 hover:text-white transition-colors cursor-pointer"
-                        >
-                          About
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#services"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            document
-                              .getElementById("services")
-                              ?.scrollIntoView({ behavior: "smooth" });
-                          }}
-                          className="text-white/80 hover:text-white transition-colors cursor-pointer"
-                        >
-                          Services
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#contact"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            document
-                              .getElementById("contact")
-                              ?.scrollIntoView({ behavior: "smooth" });
-                          }}
-                          className="text-white/80 hover:text-white transition-colors cursor-pointer"
-                        >
-                          Contact
-                        </a>
-                      </li>
+                      {FOOTER_NAV_LINKS.map((item) => (
+                        <li key={item.href}>
+                          <Link
+                            href={item.href}
+                            className="text-white/80 hover:text-white transition-colors"
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      ))}
                     </ul>
                   </div>
 

@@ -1,10 +1,3 @@
-export interface StatItem {
-  value: number;
-  suffix: string;
-  label: string;
-  icon: string;
-}
-
 export interface ServiceItem {
   id: string;
   slug: string;
@@ -16,13 +9,6 @@ export interface ServiceItem {
   longDescription: string;
   features: string[];
   color: string;
-}
-
-export interface ThematicArea {
-  id: string;
-  title: string;
-  icon: string;
-  description: string;
 }
 
 export interface TeamMember {
@@ -68,35 +54,6 @@ export interface Project {
   isoList?: string[]; // for multi-country projects — spreads the pin across all listed ISOs
 }
 
-export interface Testimonial {
-  id: string;
-  quote: string;
-  author: string;
-  role: string;
-  organization: string;
-  country: string;
-  service?: string;
-}
-
-export interface DonorGroup {
-  category: string;
-  color: string;
-  donors: string[];
-}
-
-export interface ProcessStep {
-  step: number;
-  title: string;
-  description: string;
-  icon: string;
-}
-
-export interface ToolCategory {
-  category: string;
-  icon: string;
-  tools: string[];
-}
-
 export interface JobPosting {
   id: string;
   title: string;
@@ -119,25 +76,6 @@ export interface BlogPost {
   readingTime: number;
   tags: string[];
   content?: string;
-}
-
-export interface NavChild {
-  label: string;
-  href: string;
-  description: string;
-  icon: string;
-}
-
-export interface NavLink {
-  label: string;
-  href: string;
-  children?: NavChild[];
-}
-
-export interface AnnouncementData {
-  text: string;
-  linkText: string;
-  linkHref: string;
 }
 
 export interface CountriesData {

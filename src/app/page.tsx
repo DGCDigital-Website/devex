@@ -11,8 +11,11 @@ import dynamic from "next/dynamic";
 import Hero from "./hero";
 import { AboutUs } from "@/components";
 
-const Services     = dynamic(() => import("@/components/services"));
-const Testimonials = dynamic(() => import("@/components/testimonials"));
+const Services             = dynamic(() => import("@/components/services"));
+const Testimonials         = dynamic(() => import("@/components/testimonials"));
+const ClientLogosCarousel  = dynamic(() =>
+  import("@/components/client-logos-carousel").then((m) => ({ default: m.ClientLogosCarousel }))
+);
 
 export default function DGCHomePage() {
   return (
@@ -27,6 +30,9 @@ export default function DGCHomePage() {
       <div className="h-8" />
 
       <Testimonials />
+      <div className="h-8" />
+
+      <ClientLogosCarousel />
       <div className="h-8" />
     </div>
   );

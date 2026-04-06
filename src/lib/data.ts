@@ -5,6 +5,7 @@ import type {
   Project,
   JobPosting,
   BlogPost,
+  ClientLogo,
 } from "./types";
 
 // ─────────────────────────────────────────
@@ -768,4 +769,29 @@ Relationships are the foundation on which rigour and relevance rest. We have bui
 
 Across 480+ evaluations, assessments, and consultancies delivered since our founding, we have maintained one consistent commitment: to give our clients the truth, clearly and constructively, in a form they can act on. That is what we mean by Powerful Insights, Proven Delivery.`,
   },
+];
+
+// ─────────────────────────────────────────
+// CLIENT LOGOS
+// ─────────────────────────────────────────
+export const CLIENT_LOGOS: ClientLogo[] = [
+  { id: "plan-international",           name: "Plan International",            logo: "/images/clients/plan-international.jpg" },
+  { id: "irc",                          name: "International Rescue Committee", logo: "/images/clients/irc.jpg" },
+  { id: "wfp",                          name: "World Food Programme",           logo: "/images/clients/wfp.jpg" },
+  { id: "undp",                         name: "UNDP",                           logo: "/images/clients/undp.jpg" },
+  { id: "usaid",                        name: "USAID",                          logo: "/images/clients/usaid.jpg" },
+  { id: "un-women",                     name: "UN Women",                       logo: "/images/clients/un-women.jpg" },
+  { id: "caritas",                      name: "Caritas",                        logo: "/images/clients/caritas.jpg" },
+  { id: "deloitte",                     name: "Deloitte",                       logo: "/images/clients/deloitte.jpg" },
+  { id: "fairtrade",                    name: "Fairtrade",                      logo: "/images/clients/fairtrade.jpg" },
+  { id: "greenpeace",                   name: "Greenpeace",                     logo: "/images/clients/greenpeace.jpg" },
+  { id: "lvct",                         name: "LVCT Health",                    logo: "/images/clients/lvct.jpg" },
+  { id: "child-helpline-international", name: "Child Helpline International",   logo: "/images/clients/child-helpline-international.jpg" },
+  { id: "aah",                          name: "Action Africa Help",             logo: "/images/clients/aah.jpg" },
+  { id: "dfpa",                         name: "DFPA",                           logo: "/images/clients/dfpa.jpg" },
+  { id: "eabl",                         name: "East African Breweries",         logo: "/images/clients/eabl.jpg" },
+  { id: "kivulini",                     name: "Kivulini",                       logo: "/images/clients/kivulini.jpg" },
+  { id: "relief-alliance",              name: "Relief Alliance",                logo: "/images/clients/relief-allieance.jpg" },
+  { id: "siha",                         name: "SIHA Network",                   logo: "/images/clients/siha.jpg" },
+  { id: "simavi",                       name: "Simavi",                         logo: "/images/clients/simavi.jpg" },
 ];

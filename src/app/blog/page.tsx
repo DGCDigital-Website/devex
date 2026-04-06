@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Clock, ArrowRight } from "lucide-react";
 import { BLOG_POSTS } from "@/lib/data";
@@ -51,27 +52,37 @@ export default function BlogPage() {
               return (
                 <Link key={post.slug} href={`/blog/${post.slug}`} className="group block h-full">
                   <article className="rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-dgc-blue-1/30 transition-all duration-300 h-full flex flex-col overflow-hidden">
-                    {/* Cover */}
-                    <div
-                      className="h-44 flex items-center justify-center"
-                      style={{ background: `linear-gradient(135deg, ${accentColor}10, ${accentColor}05)` }}
-                    >
+                    {/* Cover image */}
+                    <div className="relative h-48 w-full overflow-hidden bg-gray-100">
+                      {post.coverImage ? (
+                        <Image
+                          src={post.coverImage}
+                          alt={post.title}
+                          fill
+                          className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                        />
+                      ) : (
+                        <div
+                          className="h-full w-full flex items-center justify-center"
+                          style={{ background: `linear-gradient(135deg, ${accentColor}10, ${accentColor}05)` }}
+                        >
+                          <span className="text-6xl font-extrabold select-none" style={{ color: `${accentColor}15` }}>
+                            {post.category.charAt(0)}
+                          </span>
+                        </div>
+                      )}
+                      {/* Category badge overlaid on image */}
                       <span
-                        className="text-6xl font-extrabold select-none"
-                        style={{ color: `${accentColor}15` }}
+                        className="absolute top-3 left-3 text-[10px] font-semibold px-2.5 py-0.5 rounded-full backdrop-blur-sm"
+                        style={{ background: `${accentColor}dd`, color: "#fff", border: `1px solid ${accentColor}` }}
                       >
-                        {post.category.charAt(0)}
+                        {post.category}
                       </span>
                     </div>
 
                     <div className="p-6 space-y-3 flex-1 flex flex-col">
                       <div className="flex items-center gap-2">
-                        <span
-                          className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full"
-                          style={{ background: `${accentColor}20`, color: accentColor, border: `1px solid ${accentColor}40` }}
-                        >
-                          {post.category}
-                        </span>
                         <span className="text-gray-400 text-xs flex items-center gap-1">
                           <Clock className="w-3 h-3" /> {post.readingTime} min read
                         </span>
