@@ -11,6 +11,7 @@ GRANT ALL ON public.jobs            TO anon, authenticated;
 GRANT ALL ON public.invoices        TO anon, authenticated;
 GRANT ALL ON public.quotations      TO anon, authenticated;
 GRANT ALL ON public.calendar_events TO anon, authenticated;
+GRANT ALL ON public.blog_posts      TO anon, authenticated;
 
 -- Grant sequence usage for auto-increment columns (contacts uses bigserial)
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated;
@@ -22,6 +23,7 @@ ALTER TABLE public.jobs            ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.invoices        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.quotations      ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.calendar_events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.blog_posts      ENABLE ROW LEVEL SECURITY;
 
 -- ── 3. Drop any stale policies and recreate cleanly ───────────────────────────
 
@@ -62,6 +64,15 @@ DROP POLICY IF EXISTS beacon_auth_calendar       ON public.calendar_events;
 
 CREATE POLICY events_anon_select ON public.calendar_events FOR SELECT  TO anon          USING (true);
 CREATE POLICY events_auth_all    ON public.calendar_events FOR ALL     TO authenticated USING (true) WITH CHECK (true);
+
+-- blog_posts
+DROP POLICY IF EXISTS blog_anon_select   ON public.blog_posts;
+DROP POLICY IF EXISTS blog_auth_all      ON public.blog_posts;
+
+CREATE POLICY blog_anon_select ON public.blog_posts
+  FOR SELECT TO anon USING (status = 'published');
+CREATE POLICY blog_auth_all ON public.blog_posts
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
 -- ── Done ──────────────────────────────────────────────────────────────────────
 SELECT 'Permissions and RLS policies applied successfully.' AS result;

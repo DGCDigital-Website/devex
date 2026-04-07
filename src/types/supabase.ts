@@ -230,6 +230,57 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_posts: {
+        Row: {
+          author: string
+          category: string
+          content: string | null
+          cover_image: string | null
+          created_at: string | null
+          excerpt: string | null
+          id: string
+          published_at: string | null
+          reading_time: number | null
+          slug: string
+          status: string
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          author?: string
+          category?: string
+          content?: string | null
+          cover_image?: string | null
+          created_at?: string | null
+          excerpt?: string | null
+          id: string
+          published_at?: string | null
+          reading_time?: number | null
+          slug: string
+          status?: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          author?: string
+          category?: string
+          content?: string | null
+          cover_image?: string | null
+          created_at?: string | null
+          excerpt?: string | null
+          id?: string
+          published_at?: string | null
+          reading_time?: number | null
+          slug?: string
+          status?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       quotations: {
         Row: {
           address: string

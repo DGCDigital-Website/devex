@@ -150,6 +150,35 @@ DO $$ BEGIN
   END IF;
 END $$;
 
+-- ─── BLOG POSTS ────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS public.blog_posts (
+  id            text PRIMARY KEY,
+  title         text NOT NULL,
+  slug          text UNIQUE NOT NULL,
+  excerpt       text,
+  content       text,
+  cover_image   text,
+  category      text NOT NULL DEFAULT 'General',
+  tags          text[] DEFAULT '{}',
+  author        text NOT NULL DEFAULT 'DGC Team',
+  status        text NOT NULL DEFAULT 'draft',
+  reading_time  int DEFAULT 5,
+  published_at  timestamptz,
+  created_at    timestamptz DEFAULT now(),
+  updated_at    timestamptz DEFAULT now()
+);
+
+ALTER TABLE public.blog_posts ENABLE ROW LEVEL SECURITY;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='blog_posts' AND policyname='blog_anon_select') THEN
+    CREATE POLICY blog_anon_select ON public.blog_posts FOR SELECT TO anon USING (status = 'published');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='blog_posts' AND policyname='blog_auth_all') THEN
+    CREATE POLICY blog_auth_all ON public.blog_posts FOR ALL TO authenticated USING (true) WITH CHECK (true);
+  END IF;
+END $$;
+
 -- ============================================================
 -- SEED DATA
 -- ============================================================

@@ -96,7 +96,7 @@ VALUES
 ON CONFLICT DO NOTHING;
 
 -- ── ADDITIONAL QUOTATIONS (top up to 30) ─────────────────────────────────────
-INSERT INTO public.quotations (id, name, company, company_email, address, country, contact, service, issued_date, due_date, quotation_status, total, subtotal, tax_amount)
+INSERT INTO public.quotations (id, name, company, company_email, address, country, contact, service, issued_date, valid_until, quotation_status, total, subtotal, tax_amount)
 VALUES
   ('QUO-011', 'Amara Diallo',    'UNICEF',              'amara.diallo@unicef.org',       '3 UN Plaza',          'Senegal',     '+221 77 123 4567', 'Organisational Capacity Review',    '2025-01-12', '2025-02-12', 'Accepted',  900000,  810000,  90000),
   ('QUO-012', 'Nguyen Van Minh', 'Asian Development Bank','v.minh@adb.org',              'ADB HQ',              'Vietnam',     '+84 90 234 5678',  'Impact Evaluation Design',          '2025-01-25', '2025-02-25', 'Sent',      1350000, 1200000, 150000),
@@ -121,26 +121,28 @@ VALUES
 ON CONFLICT DO NOTHING;
 
 -- ── ADDITIONAL CALENDAR EVENTS (top up to 30) ────────────────────────────────
-INSERT INTO public.calendar_events (title, description, start_at, end_at, location, type, color)
+-- Matches schema from supabase.ts and seed.sql:
+-- columns: id, title, start_at, end_at, all_day, calendar, description, url
+INSERT INTO public.calendar_events (id, title, start_at, end_at, all_day, calendar, description, url)
 VALUES
-  ('USAID Annual Review',             'Annual programme review with USAID East Africa team',                        '2025-08-05 09:00:00+00','2025-08-05 17:00:00+00','Nairobi, Kenya',       'meeting',   '#3D9DD9'),
-  ('UN Women Partnership Forum',      'Strategic partnership discussion with UN Women ESARO',                       '2025-08-12 10:00:00+00','2025-08-12 12:30:00+00','Nairobi, Kenya',       'meeting',   '#8B5CF6'),
-  ('DGC Staff Retreat',               'Annual staff planning and team-building retreat',                            '2025-08-18 08:00:00+00','2025-08-20 17:00:00+00','Nanyuki, Kenya',       'event',     '#10B981'),
-  ('Climate Finance Workshop',        'Workshop on accessing climate finance for African CSOs',                     '2025-08-26 09:00:00+00','2025-08-26 16:00:00+00','Kampala, Uganda',      'workshop',  '#F59E0B'),
-  ('INGO Coordination Meeting',       'Monthly coordination meeting with INGO consortium members',                  '2025-09-02 14:00:00+00','2025-09-02 15:30:00+00','Online',              'meeting',   '#6B7280'),
-  ('GBV Response Training',           'Training for frontline workers on GBV case management',                     '2025-09-08 08:30:00+00','2025-09-10 16:30:00+00','Dar es Salaam, Tanzania','training','#EF4444'),
-  ('Invoice Submission Deadline',     'Deadline for Q3 invoice submissions to partner organisations',               '2025-09-15 17:00:00+00','2025-09-15 17:00:00+00','Nairobi, Kenya',       'deadline',  '#F59E0B'),
-  ('Food Security Conference',        'Annual conference on food security and nutrition in East Africa',            '2025-09-22 09:00:00+00','2025-09-24 17:00:00+00','Addis Ababa, Ethiopia','event',     '#10B981'),
-  ('Proposal Writing Sprint',         'Intensive 3-day proposal writing for upcoming DFID call for applications',  '2025-10-06 08:00:00+00','2025-10-08 17:00:00+00','Nairobi, Kenya',       'event',     '#3D9DD9'),
-  ('M&E Systems Review',              'Internal review of DGC monitoring and evaluation systems',                   '2025-10-14 09:00:00+00','2025-10-15 16:00:00+00','Nairobi, Kenya',       'meeting',   '#8B5CF6'),
-  ('East Africa Civil Society Forum', 'Annual civil society forum on governance and accountability',                '2025-10-20 09:00:00+00','2025-10-21 17:00:00+00','Kigali, Rwanda',       'event',     '#F59E0B'),
-  ('Q3 Financial Audit',              'External audit of Q3 financial records',                                    '2025-10-27 09:00:00+00','2025-10-29 16:00:00+00','Nairobi, Kenya',       'deadline',  '#EF4444'),
-  ('DGC Board Meeting',               'Quarterly board of directors meeting',                                      '2025-11-04 10:00:00+00','2025-11-04 14:00:00+00','Nairobi, Kenya',       'meeting',   '#0B2D59'),
-  ('WASH Technical Forum',            'Technical forum on water, sanitation and hygiene innovations',               '2025-11-11 09:00:00+00','2025-11-12 17:00:00+00','Nairobi, Kenya',       'workshop',  '#10B981'),
-  ('Annual Gala Dinner',              'DGC 25th anniversary celebration gala with partners and stakeholders',       '2025-11-28 18:30:00+00','2025-11-28 22:30:00+00','Nairobi, Kenya',       'event',     '#8B5CF6'),
-  ('World AIDS Day Event',            'Panel discussion and community awareness on HIV/AIDS',                       '2025-12-01 09:00:00+00','2025-12-01 17:00:00+00','Nairobi, Kenya',       'event',     '#EF4444'),
-  ('Year-end Staff Appraisals',       'Annual staff performance reviews and appraisals',                           '2025-12-08 09:00:00+00','2025-12-12 17:00:00+00','Nairobi, Kenya',       'deadline',  '#6B7280'),
-  ('Budget Planning FY2026',          'Strategic planning and budgeting for financial year 2026',                   '2025-12-15 09:00:00+00','2025-12-16 16:00:00+00','Nairobi, Kenya',       'meeting',   '#3D9DD9')
+  ('evt-013', 'USAID Annual Review',             '2025-08-05 09:00:00+00','2025-08-05 17:00:00+00', false, 'Client Meeting', 'Annual programme review with USAID East Africa team', 'https://devexglobal.com/events'),
+  ('evt-014', 'UN Women Partnership Forum',      '2025-08-12 10:00:00+00','2025-08-12 12:30:00+00', false, 'Client Meeting', 'Strategic partnership discussion with UN Women ESARO', 'https://devexglobal.com/events'),
+  ('evt-015', 'DGC Staff Retreat',               '2025-08-18 08:00:00+00','2025-08-20 17:00:00+00', false, 'Internal',       'Annual staff planning and team-building retreat', null),
+  ('evt-016', 'Climate Finance Workshop',        '2025-08-26 09:00:00+00','2025-08-26 16:00:00+00', false, 'Workshops',      'Workshop on accessing climate finance for African CSOs', 'https://devexglobal.com/events'),
+  ('evt-017', 'INGO Coordination Meeting',       '2025-09-02 14:00:00+00','2025-09-02 15:30:00+00', false, 'Client Meeting', 'Monthly coordination meeting with INGO consortium members', null),
+  ('evt-018', 'GBV Response Training',           '2025-09-08 08:30:00+00','2025-09-10 16:30:00+00', false, 'Workshops',      'Training for frontline workers on GBV case management', null),
+  ('evt-019', 'Invoice Submission Deadline',     '2025-09-15 17:00:00+00','2025-09-15 17:00:00+00', true,  'Other',          'Deadline for Q3 invoice submissions to partner organisations', null),
+  ('evt-020', 'Food Security Conference',        '2025-09-22 09:00:00+00','2025-09-24 17:00:00+00', false, 'Client Meeting', 'Annual conference on food security and nutrition in East Africa', 'https://devexglobal.com/events'),
+  ('evt-021', 'Proposal Writing Sprint',         '2025-10-06 08:00:00+00','2025-10-08 17:00:00+00', false, 'Internal',       'Intensive 3-day proposal writing for upcoming donor calls', null),
+  ('evt-022', 'M&E Systems Review',              '2025-10-14 09:00:00+00','2025-10-15 16:00:00+00', false, 'Internal',       'Internal review of DGC monitoring and evaluation systems', null),
+  ('evt-023', 'East Africa Civil Society Forum', '2025-10-20 09:00:00+00','2025-10-21 17:00:00+00', false, 'Client Meeting', 'Annual civil society forum on governance and accountability', 'https://devexglobal.com/events'),
+  ('evt-024', 'Q3 Financial Audit',              '2025-10-27 09:00:00+00','2025-10-29 16:00:00+00', false, 'Internal',       'External audit of Q3 financial records', null),
+  ('evt-025', 'DGC Board Meeting',               '2025-11-04 10:00:00+00','2025-11-04 14:00:00+00', false, 'Internal',       'Quarterly board of directors meeting', null),
+  ('evt-026', 'WASH Technical Forum',            '2025-11-11 09:00:00+00','2025-11-12 17:00:00+00', false, 'Workshops',      'Technical forum on water, sanitation and hygiene innovations', 'https://devexglobal.com/events'),
+  ('evt-027', 'Annual Gala Dinner',              '2025-11-28 18:30:00+00','2025-11-28 22:30:00+00', false, 'Other',          'DGC anniversary celebration gala with partners and stakeholders', null),
+  ('evt-028', 'World AIDS Day Event',            '2025-12-01 09:00:00+00','2025-12-01 17:00:00+00', false, 'Client Meeting', 'Panel discussion and community awareness on HIV/AIDS', 'https://devexglobal.com/events'),
+  ('evt-029', 'Year-end Staff Appraisals',       '2025-12-08 09:00:00+00','2025-12-12 17:00:00+00', false, 'Internal',       'Annual staff performance reviews and appraisals', null),
+  ('evt-030', 'Budget Planning FY2026',          '2025-12-15 09:00:00+00','2025-12-16 16:00:00+00', false, 'Internal',       'Strategic planning and budgeting for financial year 2026', null)
 ON CONFLICT DO NOTHING;
 
 -- ── BLOG POSTS ────────────────────────────────────────────────────────────────
