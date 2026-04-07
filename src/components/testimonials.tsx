@@ -11,25 +11,25 @@ const Testimonials = () => {
       quote: "DGC's consultants brought deep contextual knowledge and methodological rigour to our programme evaluation. Their insights were instrumental in shaping our next strategic cycle.",
       name: "Country Director",
       designation: "Plan International, East Africa",
-      src: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=3560&auto=format&fit=crop&ixlib=rb-4.0.3",
+      src: "/images/clients/plan-international.jpg",
     },
     {
       quote: "The DGC team demonstrated exceptional professionalism and cultural sensitivity throughout the assignment. The final report exceeded our expectations in both quality and timeliness.",
       name: "M&E Director",
       designation: "International Rescue Committee (IRC)",
-      src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3",
+      src: "/images/clients/irc.jpg",
     },
     {
       quote: "DGC's capacity strengthening work with our national partners has had a lasting impact. Staff confidence and programme quality have measurably improved since the engagement.",
       name: "Programme Manager",
       designation: "World Food Programme (WFP)",
-      src: "https://images.unsplash.com/photo-1623582854588-d60de57fa33f?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3",
+      src: "/images/clients/wfp.jpg",
     },
     {
       quote: "Their system strengthening support helped us build a more robust MEL framework. The tools and processes DGC developed are now embedded across all our programmes.",
       name: "Executive Director",
       designation: "LVCT Health, Kenya",
-      src: "https://images.unsplash.com/photo-1636041293178-808a6762ab39?q=80&w=3464&auto=format&fit=crop&ixlib=rb-4.0.3",
+      src: "/images/clients/lvct.jpg",
     },
   ];
 

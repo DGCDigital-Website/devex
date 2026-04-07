@@ -53,7 +53,7 @@ const Services = () => {
         "Performance management frameworks",
         "Institutional capacity appraisals"
       ],
-      imageSrc: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      imageSrc: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
       imageAlt: "Organisational development and strengthening"
     },
     "capacity-strengthening": {
@@ -67,7 +67,7 @@ const Services = () => {
         "Knowledge management and documentation",
         "Community of practice facilitation"
       ],
-      imageSrc: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      imageSrc: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
       imageAlt: "Capacity building and training"
     },
     "system-strengthening": {
@@ -81,7 +81,7 @@ const Services = () => {
         "Supply chain and logistics system strengthening",
         "Accountability and feedback mechanisms"
       ],
-      imageSrc: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      imageSrc: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
       imageAlt: "Systems strengthening and evaluation"
     },
     "safety-security": {
@@ -95,7 +95,7 @@ const Services = () => {
         "Security policy review and development",
         "Emergency preparedness and response planning"
       ],
-      imageSrc: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      imageSrc: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
       imageAlt: "Safety and security management"
     }
   };
