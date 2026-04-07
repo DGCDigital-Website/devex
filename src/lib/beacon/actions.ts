@@ -35,7 +35,8 @@ async function requireAuth() {
   let supabase: ReturnType<typeof createAdminClient> | typeof sessionClient;
   try {
     supabase = createAdminClient();
-  } catch {
+  } catch (err) {
+    console.error("[beacon] createAdminClient failed — falling back to session client:", err);
     supabase = sessionClient;
   }
   return { supabase, user };
