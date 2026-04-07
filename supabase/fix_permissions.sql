@@ -3,18 +3,21 @@
 -- Run this in: Supabase Dashboard → SQL Editor → Run
 -- =============================================================
 
--- ── 1. GRANT table access to anon + authenticated roles ──────────────────────
+-- ── 1. GRANT table access to all roles that touch these tables ────────────────
 -- "permission denied for table X" means the role lacks GRANT, not just RLS.
+-- service_role = Supabase admin client (bypasses RLS but still needs GRANT)
+-- authenticated = logged-in users via session client
+-- anon = unauthenticated / public access
 
-GRANT ALL ON public.contacts        TO anon, authenticated;
-GRANT ALL ON public.jobs            TO anon, authenticated;
-GRANT ALL ON public.invoices        TO anon, authenticated;
-GRANT ALL ON public.quotations      TO anon, authenticated;
-GRANT ALL ON public.calendar_events TO anon, authenticated;
-GRANT ALL ON public.blog_posts      TO anon, authenticated;
+GRANT ALL ON public.contacts        TO anon, authenticated, service_role;
+GRANT ALL ON public.jobs            TO anon, authenticated, service_role;
+GRANT ALL ON public.invoices        TO anon, authenticated, service_role;
+GRANT ALL ON public.quotations      TO anon, authenticated, service_role;
+GRANT ALL ON public.calendar_events TO anon, authenticated, service_role;
+GRANT ALL ON public.blog_posts      TO anon, authenticated, service_role;
 
 -- Grant sequence usage for auto-increment columns (contacts uses bigserial)
-GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated, service_role;
 
 -- ── 2. Enable RLS on all tables ───────────────────────────────────────────────
 

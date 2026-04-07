@@ -74,7 +74,10 @@ export async function createContact(
 ): Promise<ActionResult> {
   const { supabase } = await requireAuth();
   const { error } = await supabase.from("contacts").insert(payload);
-  if (error) return { error: error.message };
+  if (error) {
+    console.error("[beacon] createContact failed:", error.code, error.message);
+    return { error: error.message };
+  }
   revalidatePath("/beacon/contacts");
   return {};
 }
