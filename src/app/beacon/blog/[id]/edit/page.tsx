@@ -1,29 +1,29 @@
 import { notFound } from "next/navigation";
 import { requireBeaconAuth } from "@/utils/supabase/beacon";
-import EditContactForm from "./edit-contact-form";
+import BlogForm from "../../blog-form";
 
 export const dynamic = "force-dynamic";
 
-export default async function EditContactPage({
+export default async function EditBlogPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const { db: supabase, user } = await requireBeaconAuth();
+  const { db, user } = await requireBeaconAuth();
 
-  const { data: contact } = await supabase
-    .from("contacts")
+  const { data: post } = await db
+    .from("blog_posts")
     .select("*")
-    .eq("id", Number(id))
+    .eq("id", id)
     .single();
 
-  if (!contact) notFound();
+  if (!post) notFound();
 
   return (
-    <EditContactForm
+    <BlogForm
       user={{ email: user.email ?? "", id: user.id }}
-      contact={contact}
+      post={post}
     />
   );
 }

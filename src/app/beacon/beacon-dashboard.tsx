@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import BeaconShell from "@/components/beacon/beacon-shell";
 import type { BeaconUser } from "@/lib/beacon/types";
@@ -18,6 +19,8 @@ import {
   Plus,
 } from "lucide-react";
 
+const FinanceChart = dynamic(() => import("@/components/beacon/finance-chart"), { ssr: false });
+
 /* ── types ──────────────────────────────────────────────────────────────── */
 
 type RecentContact = {
@@ -29,6 +32,8 @@ type RecentContact = {
   created_at: string | null;
 };
 
+type ChartPoint = { month: string; invoices: number; quotations: number };
+
 type Stats = {
   contacts: number;
   jobs: number;
@@ -38,6 +43,7 @@ type Stats = {
   quotationCount: number;
   quotationTotal: number;
   recentContacts: RecentContact[];
+  financeChart: ChartPoint[];
 };
 
 type Props = { user: BeaconUser; stats: Stats };
@@ -250,12 +256,12 @@ export default function BeaconDashboard({ user, stats }: Props) {
         {/* Finance summary + Quick actions — two column layout */}
         <div className="grid lg:grid-cols-[1fr_320px] gap-6">
 
-          {/* Finance summary */}
+          {/* Finance summary + chart */}
           <div className="bg-white rounded-2xl border border-gray-200/80 shadow-[0_1px_4px_rgba(0,0,0,0.06)] overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
               <div>
                 <h2 className="text-gray-900 font-semibold text-sm">Finance Summary</h2>
-                <p className="text-gray-400 text-xs mt-0.5">Invoices & quotation pipeline at a glance</p>
+                <p className="text-gray-400 text-xs mt-0.5">Invoices & quotation pipeline — last 6 months</p>
               </div>
               <Link
                 href="/beacon/invoices"
@@ -264,7 +270,9 @@ export default function BeaconDashboard({ user, stats }: Props) {
                 All invoices <ChevronRight className="w-3.5 h-3.5" />
               </Link>
             </div>
-            <div className="p-6 grid sm:grid-cols-3 gap-4">
+
+            {/* KPI row */}
+            <div className="px-6 pt-5 grid sm:grid-cols-3 gap-4">
               {financeSummary.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -274,15 +282,19 @@ export default function BeaconDashboard({ user, stats }: Props) {
                     </div>
                     <div>
                       <p className="text-gray-400 text-[11px] font-medium leading-tight">{item.label}</p>
-                      <p className={`text-gray-900 font-bold text-base mt-0.5 ${item.color}`}>
-                        {item.value}
-                      </p>
+                      <p className={`text-gray-900 font-bold text-base mt-0.5 ${item.color}`}>{item.value}</p>
                     </div>
                   </div>
                 );
               })}
             </div>
-            {/* Divider */}
+
+            {/* Bar chart */}
+            <div className="px-4 pt-4 pb-2">
+              <FinanceChart data={stats.financeChart} />
+            </div>
+
+            {/* Actions */}
             <div className="border-t border-gray-100 px-6 py-4 flex items-center gap-4">
               <Link
                 href="/beacon/invoices/add"

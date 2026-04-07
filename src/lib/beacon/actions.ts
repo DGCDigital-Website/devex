@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
+import { createAdminClient } from "@/utils/supabase/admin";
 import type {
   ContactInsert,
   ContactUpdate,
@@ -14,17 +15,29 @@ import type {
   QuotationUpdate,
   CalendarEventInsert,
   CalendarEventUpdate,
+  BlogPostInsert,
+  BlogPostUpdate,
 } from "./types";
 
 // ── Auth guard ────────────────────────────────────────────────────────────────
+// Uses the session client to verify the logged-in user, then returns an
+// admin (service-role) client for the actual DB operations — bypassing RLS.
+// Falls back to the session client if SUPABASE_SERVICE_ROLE_KEY is not set.
 
 async function requireAuth() {
-  const supabase = await createClient();
+  const sessionClient = await createClient();
   const {
     data: { user },
     error,
-  } = await supabase.auth.getUser();
+  } = await sessionClient.auth.getUser();
   if (error || !user) redirect("/beacon/login");
+
+  let supabase: ReturnType<typeof createAdminClient> | typeof sessionClient;
+  try {
+    supabase = createAdminClient();
+  } catch {
+    supabase = sessionClient;
+  }
   return { supabase, user };
 }
 
@@ -310,16 +323,10 @@ export async function getDashboardStats() {
   const { supabase } = await requireAuth();
   const [contacts, jobs, invoices, quotations, recentContacts] =
     await Promise.all([
-      supabase
-        .from("contacts")
-        .select("*", { count: "exact", head: true }),
+      supabase.from("contacts").select("*", { count: "exact", head: true }),
       supabase.from("jobs").select("*", { count: "exact", head: true }),
-      supabase
-        .from("invoices")
-        .select("total, invoice_status"),
-      supabase
-        .from("quotations")
-        .select("total, quotation_status"),
+      supabase.from("invoices").select("total, invoice_status, issued_date"),
+      supabase.from("quotations").select("total, quotation_status, issued_date"),
       supabase
         .from("contacts")
         .select("id, full_name, email, role, status, created_at")
@@ -327,17 +334,36 @@ export async function getDashboardStats() {
         .limit(10),
     ]);
 
-  const invoiceTotal = (invoices.data ?? []).reduce(
-    (s, i) => s + (i.total ?? 0),
-    0
-  );
-  const pendingInvoices = (invoices.data ?? []).filter(
-    (i) => i.invoice_status !== "Paid"
-  ).length;
-  const quotationTotal = (quotations.data ?? []).reduce(
-    (s, q) => s + (q.total ?? 0),
-    0
-  );
+  const invoiceTotal = (invoices.data ?? []).reduce((s, i) => s + (i.total ?? 0), 0);
+  const pendingInvoices = (invoices.data ?? []).filter((i) => i.invoice_status !== "Paid").length;
+  const quotationTotal = (quotations.data ?? []).reduce((s, q) => s + (q.total ?? 0), 0);
+
+  // Build last-6-months chart data
+  const now = new Date();
+  const months: { key: string; label: string }[] = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    months.push({
+      key: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`,
+      label: d.toLocaleDateString("en", { month: "short" }),
+    });
+  }
+
+  function monthKey(dateStr: string | null) {
+    if (!dateStr) return "";
+    const d = new Date(dateStr);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+  }
+
+  const financeChart = months.map(({ key, label }) => ({
+    month: label,
+    invoices: (invoices.data ?? [])
+      .filter((r) => monthKey(r.issued_date) === key)
+      .reduce((s, r) => s + (r.total ?? 0), 0),
+    quotations: (quotations.data ?? [])
+      .filter((r) => monthKey(r.issued_date) === key)
+      .reduce((s, r) => s + (r.total ?? 0), 0),
+  }));
 
   return {
     contacts: contacts.count ?? 0,
@@ -348,5 +374,73 @@ export async function getDashboardStats() {
     quotationCount: (quotations.data ?? []).length,
     quotationTotal,
     recentContacts: recentContacts.data ?? [],
+    financeChart,
   };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// BLOG POSTS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+export async function addBlogPost(
+  data: BlogPostInsert
+): Promise<ActionResult<{ id: string }>> {
+  try {
+    const { supabase } = await requireAuth();
+    const { data: row, error } = await supabase
+      .from("blog_posts")
+      .insert({ ...data, updated_at: new Date().toISOString() })
+      .select("id")
+      .single();
+    if (error) return { error: error.message };
+    revalidatePath("/beacon/blog");
+    revalidatePath("/blog");
+    return { data: { id: row.id } };
+  } catch (e) {
+    return { error: String(e) };
+  }
+}
+
+export async function updateBlogPost(
+  id: string,
+  data: BlogPostUpdate
+): Promise<ActionResult> {
+  try {
+    const { supabase } = await requireAuth();
+    const { error } = await supabase
+      .from("blog_posts")
+      .update({ ...data, updated_at: new Date().toISOString() })
+      .eq("id", id);
+    if (error) return { error: error.message };
+    revalidatePath("/beacon/blog");
+    revalidatePath("/blog");
+    revalidatePath(`/blog/${data.slug ?? id}`);
+    return {};
+  } catch (e) {
+    return { error: String(e) };
+  }
+}
+
+export async function deleteBlogPost(id: string): Promise<ActionResult> {
+  try {
+    const { supabase } = await requireAuth();
+    const { error } = await supabase.from("blog_posts").delete().eq("id", id);
+    if (error) return { error: error.message };
+    revalidatePath("/beacon/blog");
+    revalidatePath("/blog");
+    return {};
+  } catch (e) {
+    return { error: String(e) };
+  }
+}
+
+export async function publishBlogPost(id: string): Promise<ActionResult> {
+  return updateBlogPost(id, {
+    status: "published",
+    published_at: new Date().toISOString(),
+  });
+}
+
+export async function unpublishBlogPost(id: string): Promise<ActionResult> {
+  return updateBlogPost(id, { status: "draft", published_at: null });
 }

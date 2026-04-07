@@ -202,3 +202,41 @@ export const DGC_SERVICES = [
   "Programme Delivery",
   "Other",
 ] as const;
+
+// ── Blog Posts ────────────────────────────────────────────────────────────────
+
+export type BlogPostRow = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  content: string | null;
+  cover_image: string | null;
+  category: string;
+  tags: string[];
+  author: string;
+  status: string;
+  reading_time: number | null;
+  published_at: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+};
+
+export type BlogPostInsert = Omit<BlogPostRow, "created_at" | "updated_at">;
+export type BlogPostUpdate = Partial<BlogPostInsert>;
+
+export const BLOG_CATEGORIES = [
+  "Research & Evaluation",
+  "Policy & Advocacy",
+  "Technology & Innovation",
+  "Climate & Environment",
+  "Governance & Accountability",
+  "Health & Wellbeing",
+  "Partnerships & Localisation",
+  "Livelihoods & Economic Development",
+  "Social Protection",
+  "Urban Development",
+  "Protection & Safety",
+  "Organisation Updates",
+  "General",
+] as const;

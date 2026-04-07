@@ -1,5 +1,5 @@
-import { redirect, notFound } from "next/navigation";
-import { createClient } from "@/utils/supabase/server";
+import { notFound } from "next/navigation";
+import { requireBeaconAuth } from "@/utils/supabase/beacon";
 import EditJobForm from "./edit-job-form";
 
 export const dynamic = "force-dynamic";
@@ -10,13 +10,7 @@ export default async function EditJobPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
-  if (error || !user) redirect("/beacon/login");
+  const { db: supabase, user } = await requireBeaconAuth();
 
   const { data: job } = await supabase
     .from("jobs")

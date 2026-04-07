@@ -1,16 +1,10 @@
-import { redirect } from "next/navigation";
-import { createClient } from "@/utils/supabase/server";
+import { requireBeaconAuth } from "@/utils/supabase/beacon";
 import ContactsView from "./contacts-view";
 
 export const dynamic = "force-dynamic";
 
 export default async function ContactsPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
-  if (error || !user) redirect("/beacon/login");
+  const { db: supabase, user } = await requireBeaconAuth();
 
   const { data: contacts } = await supabase
     .from("contacts")

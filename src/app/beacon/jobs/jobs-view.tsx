@@ -12,6 +12,7 @@ import {
   Search,
   Pencil,
   Trash2,
+  Eye,
   Briefcase,
   MapPin,
   Clock,
@@ -228,6 +229,9 @@ export default function JobsView({ user, jobs }: Props) {
                     {/* Actions */}
                     <td className="px-5 py-3.5">
                       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Link href={`/beacon/jobs/${j.id}/view`} className="p-1.5 rounded-lg text-gray-400 hover:text-dgc-blue-1 hover:bg-dgc-blue-1/10 transition-colors" title="Preview">
+                          <Eye className="w-3.5 h-3.5" />
+                        </Link>
                         <Link href={`/beacon/jobs/${j.id}/edit`} className="p-1.5 rounded-lg text-gray-400 hover:text-dgc-blue-1 hover:bg-dgc-blue-1/10 transition-colors" title="Edit">
                           <Pencil className="w-3.5 h-3.5" />
                         </Link>

@@ -1,73 +1,41 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import Image from "next/image";
+import Link from "next/link";
 import {
-  LayoutDashboard,
   Users,
   Briefcase,
   CalendarDays,
   FileText,
   ClipboardList,
   Palette,
-  Globe,
   LogOut,
   Menu,
   X,
-  ExternalLink,
-  ChevronRight,
+  ChevronDown,
+  ArrowUpRight,
+  LayoutDashboard,
+  HelpCircle,
+  BookOpen,
 } from "lucide-react";
 import type { BeaconUser } from "@/lib/beacon/types";
 
-// ── nav config ────────────────────────────────────────────────────────────────
+// ── App items shown in the "Apps" dropdown ─────────────────────────────────────
 
-type NavItem = {
-  label: string;
-  icon: React.ElementType;
-  href: string;
-  external?: boolean;
-};
+const APPS = [
+  { href: "/beacon/contacts",   label: "Contacts",     description: "Manage enquiries & stakeholder records",    Icon: Users        },
+  { href: "/beacon/jobs",       label: "Jobs",         description: "Post and manage job listings",              Icon: Briefcase    },
+  { href: "/beacon/blog",       label: "Blog Posts",   description: "Write, edit & publish articles",            Icon: BookOpen     },
+  { href: "/beacon/calendar",   label: "Calendar",     description: "Schedule and track events",                 Icon: CalendarDays },
+  { href: "/beacon/invoices",   label: "Invoices",     description: "Create and send client invoices",           Icon: FileText     },
+  { href: "/beacon/quotations", label: "Quotations",   description: "Generate and track quotations",             Icon: ClipboardList},
+  { href: "/beacon/brand",      label: "Brand Manual", description: "DGC brand guidelines & assets",             Icon: Palette      },
+] as const;
 
-type NavGroup = {
-  label: string;
-  items: NavItem[];
-};
-
-const NAV_GROUPS: NavGroup[] = [
-  {
-    label: "Dashboard",
-    items: [{ label: "Overview", icon: LayoutDashboard, href: "/beacon" }],
-  },
-  {
-    label: "Operations",
-    items: [
-      { label: "Contacts", icon: Users, href: "/beacon/contacts" },
-      { label: "Jobs", icon: Briefcase, href: "/beacon/jobs" },
-      { label: "Calendar", icon: CalendarDays, href: "/beacon/calendar" },
-    ],
-  },
-  {
-    label: "Finance",
-    items: [
-      { label: "Invoices", icon: FileText, href: "/beacon/invoices" },
-      { label: "Quotations", icon: ClipboardList, href: "/beacon/quotations" },
-    ],
-  },
-  {
-    label: "Brand",
-    items: [{ label: "Brand Manual", icon: Palette, href: "/beacon/brand" }],
-  },
-  {
-    label: "External",
-    items: [
-      { label: "Public Site", icon: Globe, href: "/", external: true },
-    ],
-  },
-];
-
-// ── types ─────────────────────────────────────────────────────────────────────
+// ── Types ──────────────────────────────────────────────────────────────────────
 
 type Props = {
   user: BeaconUser;
@@ -77,7 +45,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-// ── component ─────────────────────────────────────────────────────────────────
+// ── Component ──────────────────────────────────────────────────────────────────
 
 export default function BeaconShell({
   user,
@@ -86,10 +54,23 @@ export default function BeaconShell({
   actions,
   children,
 }: Props) {
-  const router = useRouter();
+  const router   = useRouter();
   const pathname = usePathname();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [loggingOut, setLoggingOut] = useState(false);
+  const [appsOpen,    setAppsOpen]    = useState(false);
+  const [mobileOpen,  setMobileOpen]  = useState(false);
+  const [loggingOut,  setLoggingOut]  = useState(false);
+  const appsRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (appsRef.current && !appsRef.current.contains(e.target as Node)) {
+        setAppsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   const handleLogout = async () => {
     setLoggingOut(true);
@@ -99,200 +80,327 @@ export default function BeaconShell({
     router.refresh();
   };
 
-  function isActive(item: NavItem) {
-    if (item.external) return false;
-    if (item.href === "/beacon") return pathname === "/beacon";
-    return pathname.startsWith(item.href);
-  }
+  const closeAll = () => {
+    setAppsOpen(false);
+    setMobileOpen(false);
+  };
 
-  /* ── sidebar ── */
-  const SidebarContent = ({ mobile = false }: { mobile?: boolean }) => (
-    <aside
-      className={
-        mobile
-          ? "flex flex-col h-full w-72"
-          : "hidden lg:flex flex-col w-60 xl:w-64 shrink-0 h-screen sticky top-0"
-      }
-      style={{ background: "linear-gradient(180deg, #0B2D59 0%, #091e40 100%)" }}
-    >
-      {/* Logo */}
-      <div className="px-6 py-5 border-b border-white/10 flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-3">
-          <Image
-            src="/logo.svg"
-            alt="DGC"
-            width={120}
-            height={36}
-            className="h-8 w-auto brightness-0 invert"
-          />
-          <div className="h-4 w-px bg-white/15" />
-          <span className="text-white/50 text-[11px] font-bold tracking-[0.12em] uppercase">
-            Beacon
-          </span>
-        </div>
-        {mobile && (
-          <button
-            onClick={() => setSidebarOpen(false)}
-            className="text-white/40 hover:text-white transition-colors p-1"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        )}
-      </div>
+  const isFaq = pathname === "/beacon/faq";
 
-      {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-4 overflow-y-auto scrollbar-none">
-        {NAV_GROUPS.map((group) => (
-          <div key={group.label}>
-            <p className="px-3 text-[9.5px] font-semibold text-white/20 tracking-[0.14em] uppercase mb-1.5">
-              {group.label}
-            </p>
-            <div className="space-y-0.5">
-              {group.items.map((item) => {
-                const Icon = item.icon;
-                const active = isActive(item);
-                return (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    target={item.external ? "_blank" : "_self"}
-                    rel="noopener noreferrer"
-                    onClick={() => mobile && setSidebarOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[0.8125rem] font-medium transition-all duration-150 group ${
-                      active
-                        ? "bg-white/10 text-white"
-                        : "text-white/50 hover:bg-white/[0.07] hover:text-white/85"
-                    }`}
-                  >
-                    <Icon
-                      className={`w-4 h-4 shrink-0 ${
-                        active ? "text-dgc-blue-1" : ""
-                      }`}
-                    />
-                    <span className="flex-1">{item.label}</span>
-                    {item.external && (
-                      <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-40 transition-opacity" />
-                    )}
-                    {active && !item.external && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-dgc-blue-1 shrink-0" />
-                    )}
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-        ))}
-      </nav>
-
-      {/* User */}
-      <div className="px-4 py-4 border-t border-white/10 shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-dgc-blue-1/20 border border-dgc-blue-1/25 flex items-center justify-center shrink-0">
-            <span className="text-dgc-blue-1 text-xs font-bold">
-              {user.email[0]?.toUpperCase()}
-            </span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-white/75 text-xs font-medium truncate">
-              {user.email}
-            </p>
-            <p className="text-white/25 text-[10px] mt-0.5">Administrator</p>
-          </div>
-          <button
-            onClick={handleLogout}
-            disabled={loggingOut}
-            title="Sign out"
-            className="text-white/25 hover:text-white/60 transition-colors disabled:opacity-40 shrink-0 p-1"
-          >
-            <LogOut className="w-3.5 h-3.5" />
-          </button>
-        </div>
-      </div>
-    </aside>
-  );
-
-  /* ── render ── */
+  /* ─── render ─────────────────────────────────────────────────────────────── */
   return (
-    <div className="flex min-h-screen bg-[#f4f6fa] font-neometric antialiased">
-      {/* Desktop sidebar */}
-      <SidebarContent />
+    <div className="min-h-screen bg-[#f0f3f8] font-neometric antialiased flex flex-col">
 
-      {/* Mobile overlay */}
-      {sidebarOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 flex">
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setSidebarOpen(false)}
-          />
-          <div className="relative z-10 h-full">
-            <SidebarContent mobile />
-          </div>
-        </div>
-      )}
+      {/* ══════════════════ HEADER ══════════════════ */}
+      <header className="sticky top-0 z-[60] w-full bg-white/95 backdrop-blur-[18px]">
 
-      {/* Main */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Topbar */}
-        <header className="sticky top-0 z-30 bg-white/85 backdrop-blur-md border-b border-gray-200/70 shrink-0">
-          <div className="h-14 px-5 lg:px-8 flex items-center justify-between gap-4">
-            {/* Left */}
-            <div className="flex items-center gap-3 min-w-0">
-              <button
-                onClick={() => setSidebarOpen(true)}
-                className="lg:hidden p-1.5 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors shrink-0"
-              >
-                <Menu className="w-5 h-5" />
-              </button>
-              <nav className="flex items-center gap-1.5 text-sm min-w-0">
-                <span className="text-gray-400 shrink-0">Beacon</span>
-                <ChevronRight className="w-3.5 h-3.5 text-gray-300 shrink-0" />
-                <span className="text-gray-700 font-medium truncate">{title}</span>
-              </nav>
+        {/* Row 1 — logo + user/CTA ────────────────────────────────────────── */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <div className="flex items-center justify-between gap-4">
+
+            {/* Logo */}
+            <Link href="/beacon" onClick={closeAll} className="flex items-center gap-3 shrink-0">
+              <Image src="/logo.svg" alt="Devex Global Consult" width={140} height={44} className="h-11 w-auto" />
+              <div className="hidden sm:flex items-center gap-2">
+                <div className="h-5 w-px bg-black/10" />
+                <div>
+                  <p className="text-[10px] font-bold tracking-[0.14em] uppercase text-dgc-blue-1 leading-none">Beacon</p>
+                  <p className="text-[9px] text-black/40 leading-none mt-0.5">Admin Portal</p>
+                </div>
+              </div>
+            </Link>
+
+            {/* Right — desktop: user pill only */}
+            <div className="hidden lg:flex items-center gap-2">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/5 border border-black/8 text-sm">
+                <div className="w-5 h-5 rounded-full bg-dgc-blue-1/20 flex items-center justify-center shrink-0">
+                  <span className="text-dgc-blue-1 text-[10px] font-bold">
+                    {user.email[0]?.toUpperCase()}
+                  </span>
+                </div>
+                <span className="text-black/60 font-medium max-w-[160px] truncate text-xs">
+                  {user.email}
+                </span>
+              </div>
             </div>
 
-            {/* Right */}
-            <div className="flex items-center gap-2 shrink-0">
-              {actions}
+            {/* Hamburger — mobile/tablet */}
+            <button
+              type="button"
+              className="lg:hidden p-2 rounded-lg text-black/70 hover:text-black hover:bg-black/5 transition-colors"
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            >
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Luminous blue divider ───────────────────────────────────────────── */}
+        <div className="hidden lg:block max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="h-px bg-gradient-to-r from-transparent via-dgc-blue-1 to-transparent opacity-90 shadow-[0_0_14px_rgba(61,157,217,0.35)]" />
+        </div>
+
+        {/* Row 2 — nav + right CTA ─────────────────────────────────────────── */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+          <div className="relative flex items-center justify-center">
+
+            {/* Desktop nav */}
+            <nav className="hidden lg:flex items-center gap-1 relative mx-auto pr-36">
+
+              {/* Dashboard */}
+              <Link
+                href="/beacon"
+                onClick={closeAll}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                  pathname === "/beacon" ? "text-dgc-blue-1 bg-dgc-blue-1/8" : "text-black/70 hover:text-black hover:bg-black/5"
+                }`}
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                Dashboard
+              </Link>
+
+              {/* Apps dropdown */}
+              <div
+                ref={appsRef}
+                className="relative"
+                onMouseEnter={() => setAppsOpen(true)}
+                onMouseLeave={() => setAppsOpen(false)}
+              >
+                <button
+                  type="button"
+                  onClick={() => setAppsOpen((v) => !v)}
+                  className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-semibold text-black/70 hover:text-black hover:bg-black/5 transition-colors"
+                  aria-expanded={appsOpen}
+                  aria-haspopup="menu"
+                >
+                  Apps
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${appsOpen ? "rotate-180" : ""}`} />
+                </button>
+
+                {/* Dropdown panel */}
+                <div
+                  className={`absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 transition-all duration-200 origin-top
+                    ${appsOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-95 pointer-events-none"}`}
+                  role="menu"
+                  aria-label="Apps menu"
+                >
+                  <div className="w-[680px] rounded-2xl bg-white border border-black/10 shadow-2xl shadow-black/10">
+                    <div className="p-4 grid grid-cols-2 gap-2">
+                      {APPS.map((app) => {
+                        const Icon = app.Icon;
+                        const active = pathname.startsWith(app.href);
+                        return (
+                          <Link
+                            key={app.href}
+                            href={app.href}
+                            onClick={closeAll}
+                            className={`flex items-start gap-3 p-3 rounded-xl transition-colors group ${
+                              active ? "bg-dgc-blue-1/8" : "hover:bg-gray-50"
+                            }`}
+                            role="menuitem"
+                          >
+                            <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
+                              active ? "bg-dgc-blue-1/15" : "bg-gray-100 group-hover:bg-gray-200"
+                            }`}>
+                              <Icon className={`w-4 h-4 ${active ? "text-dgc-blue-1" : "text-dgc-blue-2"}`} />
+                            </div>
+                            <div className="min-w-0">
+                              <p className={`text-sm font-semibold leading-snug ${active ? "text-dgc-blue-1" : "text-gray-900 group-hover:text-dgc-dark-blue-2"} transition-colors`}>
+                                {app.label}
+                              </p>
+                              <p className="text-xs text-gray-500 mt-0.5 truncate">{app.description}</p>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                    <div className="border-t border-black/5 px-4 py-3">
+                      <Link
+                        href="/beacon"
+                        onClick={closeAll}
+                        className="text-xs text-dgc-blue-2 hover:text-dgc-blue-1 font-medium transition-colors"
+                      >
+                        Go to Dashboard overview →
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* FAQs */}
+              <Link
+                href="/beacon/faq"
+                onClick={closeAll}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                  isFaq ? "text-dgc-blue-1 bg-dgc-blue-1/8" : "text-black/70 hover:text-black hover:bg-black/5"
+                }`}
+              >
+                <HelpCircle className="w-4 h-4" />
+                FAQs
+              </Link>
+            </nav>
+
+            {/* Right: sign out + back to site ─────────────────────────────── */}
+            <div className="hidden lg:flex items-center gap-1.5 absolute right-0">
               <button
                 onClick={handleLogout}
                 disabled={loggingOut}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100 transition-all disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium text-black/60 hover:text-black hover:bg-black/5 transition-colors disabled:opacity-40"
               >
                 <LogOut className="w-4 h-4" />
-                <span className="hidden sm:inline">
-                  {loggingOut ? "Signing out…" : "Sign out"}
-                </span>
+                {loggingOut ? "Signing out…" : "Sign out"}
               </button>
+              <Link
+                href="/"
+                onClick={closeAll}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-black/15 text-sm font-semibold text-black/80 hover:text-black hover:bg-black/5 transition-colors"
+              >
+                Back to site
+                <ArrowUpRight className="w-4 h-4" />
+              </Link>
             </div>
           </div>
-        </header>
 
-        {/* Page content */}
-        <main className="flex-1 flex flex-col px-5 lg:px-8 py-7 max-w-[1280px] w-full mx-auto">
-          {/* Page header */}
-          {(title || subtitle || actions) && (
-            <div className="flex items-start justify-between gap-4 mb-7">
-              <div>
-                <h1 className="text-gray-900 text-[1.375rem] font-bold tracking-tight leading-tight">
-                  {title}
-                </h1>
-                {subtitle && (
-                  <p className="text-gray-500 text-sm mt-1">{subtitle}</p>
-                )}
-              </div>
+          {/* Mobile / tablet drawer ──────────────────────────────────────── */}
+          {mobileOpen && (
+            <div className="lg:hidden mt-3 rounded-2xl bg-white border border-black/10 shadow-xl overflow-hidden">
+              <nav className="p-2 space-y-0.5">
+                {/* Apps accordion */}
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => setAppsOpen((v) => !v)}
+                    className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-semibold text-black/80 hover:bg-black/5 transition-colors"
+                  >
+                    <span>Apps</span>
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${appsOpen ? "rotate-180" : ""}`} />
+                  </button>
+                  {appsOpen && (
+                    <div className="mt-0.5 ml-3 pl-3 border-l border-black/10 space-y-0.5">
+                      {APPS.map((app) => {
+                        const Icon = app.Icon;
+                        return (
+                          <Link
+                            key={app.href}
+                            href={app.href}
+                            onClick={closeAll}
+                            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-black/70 hover:bg-black/5 transition-colors"
+                          >
+                            <Icon className="w-4 h-4 text-dgc-blue-2 shrink-0" />
+                            {app.label}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {/* FAQs */}
+                <Link
+                  href="/beacon/faq"
+                  onClick={closeAll}
+                  className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-semibold text-black/80 hover:bg-black/5 transition-colors"
+                >
+                  <HelpCircle className="w-4 h-4 text-dgc-blue-2" />
+                  FAQs
+                </Link>
+
+                {/* User info */}
+                <div className="px-3 py-2 text-xs text-black/40 font-medium border-t border-black/5 mt-1 pt-3">
+                  Signed in as <span className="text-black/60">{user.email}</span>
+                </div>
+
+                {/* CTA buttons */}
+                <div className="pt-1 pb-1 px-1 space-y-1.5">
+                  <Link
+                    href="/beacon"
+                    onClick={closeAll}
+                    className="w-full inline-flex justify-center items-center gap-2 px-4 py-3 rounded-xl bg-dgc-dark-blue-1 text-white text-sm font-semibold hover:bg-dgc-dark-blue-2 transition-colors"
+                  >
+                    <LayoutDashboard className="w-4 h-4" />
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    disabled={loggingOut}
+                    className="w-full inline-flex justify-center items-center gap-2 px-4 py-3 rounded-xl border border-black/10 text-sm font-medium text-black/70 hover:bg-black/5 transition-colors disabled:opacity-40"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    {loggingOut ? "Signing out…" : "Sign out"}
+                  </button>
+                  <Link
+                    href="/"
+                    onClick={closeAll}
+                    className="w-full inline-flex justify-center items-center gap-2 px-4 py-3 rounded-xl border border-black/10 text-sm font-medium text-black/70 hover:bg-black/5 transition-colors"
+                  >
+                    Back to site
+                    <ArrowUpRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </nav>
             </div>
           )}
-          {children}
-        </main>
+        </div>
 
-        {/* Footer */}
-        <footer className="px-5 lg:px-8 py-4 border-t border-gray-200/60 mt-auto">
-          <p className="text-gray-400 text-xs">
-            © {new Date().getFullYear()} Devex Global Consult · Beacon ·
-            Internal use only
-          </p>
-        </footer>
-      </div>
+        {/* Bottom luminous divider ─────────────────────────────────────────── */}
+        <div className="hidden lg:block max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="h-px bg-gradient-to-r from-transparent via-dgc-blue-1 to-transparent opacity-90 shadow-[0_0_14px_rgba(61,157,217,0.35)]" />
+        </div>
+      </header>
+
+      {/* ══════════════════ PAGE CONTENT ══════════════════ */}
+      <main className="flex-1 flex flex-col px-4 sm:px-8 lg:px-10 py-8 max-w-[1280px] w-full mx-auto">
+        <div className="flex items-start justify-between gap-4 mb-7">
+          <div>
+            <h1 className="text-gray-900 text-[1.375rem] font-bold tracking-tight leading-tight">{title}</h1>
+            {subtitle && <p className="text-gray-500 text-sm mt-1">{subtitle}</p>}
+          </div>
+          {actions && <div className="flex items-center gap-2 shrink-0">{actions}</div>}
+        </div>
+        {children}
+      </main>
+
+      {/* ══════════════════ FOOTER ══════════════════ */}
+      <footer className="mt-auto bg-white border-t border-gray-200/80">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-10 py-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+
+            {/* Brand */}
+            <div className="flex items-center gap-3 shrink-0">
+              <Image src="/logo.svg" alt="DGC" width={100} height={32} className="h-8 w-auto opacity-70" />
+              <div className="h-5 w-px bg-gray-200" />
+              <div>
+                <p className="text-[10px] font-bold tracking-[0.14em] uppercase text-dgc-blue-1 leading-none">Beacon</p>
+                <p className="text-[9px] text-gray-400 leading-none mt-0.5">Admin Portal · Internal use only</p>
+              </div>
+            </div>
+
+            {/* Quick links */}
+            <nav className="flex flex-wrap items-center gap-x-5 gap-y-2">
+              {[
+                { href: "/beacon",            label: "Dashboard"  },
+                { href: "/beacon/contacts",   label: "Contacts"   },
+                { href: "/beacon/jobs",       label: "Jobs"       },
+                { href: "/beacon/blog",       label: "Blog Posts" },
+                { href: "/beacon/calendar",   label: "Calendar"   },
+                { href: "/beacon/invoices",   label: "Invoices"   },
+                { href: "/beacon/quotations", label: "Quotations" },
+                { href: "/beacon/faq",        label: "Help & FAQs"},
+              ].map((l) => (
+                <Link key={l.href} href={l.href} className="text-gray-400 text-xs hover:text-dgc-blue-1 transition-colors font-medium">
+                  {l.label}
+                </Link>
+              ))}
+            </nav>
+
+            {/* Copyright */}
+            <p className="text-gray-400 text-xs shrink-0">
+              © {new Date().getFullYear()} Devex Global Consult
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

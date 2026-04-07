@@ -4,6 +4,8 @@ import { MapPin, Calendar, ArrowRight } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
 import { JOB_POSTINGS } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Careers | Devex Global Consult",
   description:

@@ -35,6 +35,8 @@ const CSP = [
 ].join('; ');
 
 const nextConfig = {
+  transpilePackages: ["recharts"],
+
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "devexglobal.com" },
