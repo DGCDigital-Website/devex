@@ -213,7 +213,7 @@ export type BlogPostRow = {
   content: string | null;
   cover_image: string | null;
   category: string;
-  tags: string[];
+  tags: string[] | null;
   author: string;
   status: string;
   reading_time: number | null;

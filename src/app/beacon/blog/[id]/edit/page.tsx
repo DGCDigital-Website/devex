@@ -23,7 +23,7 @@ export default async function EditBlogPage({
   return (
     <BlogForm
       user={{ email: user.email ?? "", id: user.id }}
-      post={post}
+      post={{ ...post, tags: post.tags ?? [] }}
     />
   );
 }
