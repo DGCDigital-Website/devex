@@ -174,7 +174,7 @@ export default async function ContactViewPage({
             <div className="px-6 py-2">
               <InfoRow icon={User}     label="Username" value={contact.username} />
               <InfoRow icon={ShieldCheck} label="Role" value={contact.role} />
-              <InfoRow icon={Calendar} label="Last Updated" value={formatDate(contact.updated_at ?? null)} />
+              <InfoRow icon={Calendar} label="Last Updated" value={formatDate(contact.created_at)} />
             </div>
           </div>
         </div>

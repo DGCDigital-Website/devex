@@ -42,8 +42,8 @@ export default function FinanceChart({ data }: Props) {
           width={44}
         />
         <Tooltip
-          formatter={(value: number, name: string) => [
-            `KES ${value.toLocaleString()}`,
+          formatter={(value, name) => [
+            `KES ${Number(value ?? 0).toLocaleString()}`,
             name === "invoices" ? "Invoices" : "Quotations",
           ]}
           contentStyle={{

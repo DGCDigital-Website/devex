@@ -32,6 +32,9 @@ DROP POLICY IF EXISTS allow_anon_read_contacts    ON public.contacts;
 DROP POLICY IF EXISTS allow_anon_insert_contacts  ON public.contacts;
 DROP POLICY IF EXISTS allow_auth_all_contacts     ON public.contacts;
 DROP POLICY IF EXISTS beacon_auth_contacts        ON public.contacts;
+DROP POLICY IF EXISTS contacts_anon_select        ON public.contacts;
+DROP POLICY IF EXISTS contacts_anon_insert        ON public.contacts;
+DROP POLICY IF EXISTS contacts_auth_all           ON public.contacts;
 
 CREATE POLICY contacts_anon_select   ON public.contacts FOR SELECT  TO anon          USING (true);
 CREATE POLICY contacts_anon_insert   ON public.contacts FOR INSERT  TO anon          WITH CHECK (true);
@@ -41,6 +44,8 @@ CREATE POLICY contacts_auth_all      ON public.contacts FOR ALL     TO authentic
 DROP POLICY IF EXISTS allow_anon_read_jobs  ON public.jobs;
 DROP POLICY IF EXISTS allow_auth_all_jobs   ON public.jobs;
 DROP POLICY IF EXISTS beacon_auth_jobs      ON public.jobs;
+DROP POLICY IF EXISTS jobs_anon_select      ON public.jobs;
+DROP POLICY IF EXISTS jobs_auth_all         ON public.jobs;
 
 CREATE POLICY jobs_anon_select  ON public.jobs FOR SELECT  TO anon          USING (true);
 CREATE POLICY jobs_auth_all     ON public.jobs FOR ALL     TO authenticated USING (true) WITH CHECK (true);
@@ -48,12 +53,14 @@ CREATE POLICY jobs_auth_all     ON public.jobs FOR ALL     TO authenticated USIN
 -- invoices
 DROP POLICY IF EXISTS allow_auth_all_invoices  ON public.invoices;
 DROP POLICY IF EXISTS beacon_auth_invoices     ON public.invoices;
+DROP POLICY IF EXISTS invoices_auth_all        ON public.invoices;
 
 CREATE POLICY invoices_auth_all ON public.invoices FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
 -- quotations
 DROP POLICY IF EXISTS allow_auth_all_quotations  ON public.quotations;
 DROP POLICY IF EXISTS beacon_auth_quotations     ON public.quotations;
+DROP POLICY IF EXISTS quotations_auth_all        ON public.quotations;
 
 CREATE POLICY quotations_auth_all ON public.quotations FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
@@ -61,6 +68,8 @@ CREATE POLICY quotations_auth_all ON public.quotations FOR ALL TO authenticated 
 DROP POLICY IF EXISTS allow_anon_read_events     ON public.calendar_events;
 DROP POLICY IF EXISTS allow_auth_all_events      ON public.calendar_events;
 DROP POLICY IF EXISTS beacon_auth_calendar       ON public.calendar_events;
+DROP POLICY IF EXISTS events_anon_select         ON public.calendar_events;
+DROP POLICY IF EXISTS events_auth_all            ON public.calendar_events;
 
 CREATE POLICY events_anon_select ON public.calendar_events FOR SELECT  TO anon          USING (true);
 CREATE POLICY events_auth_all    ON public.calendar_events FOR ALL     TO authenticated USING (true) WITH CHECK (true);
